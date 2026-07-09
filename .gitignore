@@ -30,8 +30,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files
+.env
+.env.local
+.env.*.local
 
 # vercel
 .vercel
@@ -39,3 +41,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.next/
+CLAUDE.md
+AGENTS.md
+DEPLOYMENT_CHECKLIST.md
+01_AXIS_AGRO_SITE_BRIEF.md
+02_CURSOR_BUILD_PROMPTS.md
+03_QUICK_REFERENCE.md
+*.rar
+*.zip
