@@ -26,7 +26,7 @@ export default function AboutPage() {
         eyebrow="Our Story"
         title="About Axis Agro"
         subtitle="A livestock and poultry farm built on quality, care, and community."
-        imageUrl="/images/about-hero.jpg"
+        imageUrl="/about-hero.jpg"
         height="medium"
       />
 
