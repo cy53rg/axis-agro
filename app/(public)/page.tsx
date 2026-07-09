@@ -25,9 +25,9 @@ export default async function HomePage() {
   return (
     <>
       {/* TODO: Replace hero and about imageUrl with actual client photos */}
-      <HeroSection imageUrl="/images/hero-farm.jpg" />
+      <HeroSection imageUrl="/hero-farm.jpg" />
       <StatsBar />
-      <AboutSnapshot imageUrl="/images/about-farm.jpg" />
+      <AboutSnapshot imageUrl="/about-farm.jpg" />
       <ServicesCards />
       <GalleryStrip images={featuredImages} />
       <WhyAxisAgro />
