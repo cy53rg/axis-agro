@@ -50,3 +50,10 @@ DEPLOYMENT_CHECKLIST.md
 03_QUICK_REFERENCE.md
 *.rar
 *.zip
+node_modules
+.next
+.vercel
+.env*.local
+*.log
+dist
+.git

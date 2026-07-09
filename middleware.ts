@@ -36,15 +36,29 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
+  let redirectUrl: string | null = null;
 
+  // Handle Admin Routes Routing Logic
   if (pathname.startsWith("/admin")) {
-    if (pathname === "/admin/login") {
-      if (user) {
-        return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-      }
-    } else if (!user) {
-      return NextResponse.redirect(new URL("/admin/login", request.url));
+    if (!user && pathname !== "/admin/login") {
+      // Unauthenticated users trying to access ANY admin page get sent to login
+      redirectUrl = "/admin/login";
+    } else if (user && (pathname === "/admin/login" || pathname === "/admin")) {
+      // Authenticated users on the login page or the base /admin route get sent to dashboard
+      redirectUrl = "/admin/dashboard";
     }
+  }
+
+  // If a redirect is required, we must transfer the cookies from supabaseResponse
+  if (redirectUrl) {
+    const redirectResponse = NextResponse.redirect(new URL(redirectUrl, request.url));
+    
+    // CRITICAL: Prevent token drops by transferring refreshed cookies
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value);
+    });
+    
+    return redirectResponse;
   }
 
   return supabaseResponse;

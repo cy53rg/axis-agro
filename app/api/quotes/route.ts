@@ -4,6 +4,11 @@ import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { quoteSchema } from "@/lib/validations/quote";
 
+// Simple in-memory rate limiter (resets on serverless cold starts)
+const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
+const RATE_LIMIT = 3; 
+const WINDOW_MS = 60000; 
+
 function escapeHtml(value: string) {
   return value
     .replace(/&/g, "&amp;")
@@ -37,6 +42,23 @@ function buildEmailHtml(data: {
 }
 
 export async function POST(request: Request) {
+  // Rate Limiting Logic
+  const ip = request.headers.get("x-forwarded-for") || "unknown_ip";
+  const now = Date.now();
+  const userRate = rateLimitMap.get(ip);
+
+  if (userRate && now - userRate.lastReset < WINDOW_MS) {
+    if (userRate.count >= RATE_LIMIT) {
+      return NextResponse.json(
+        { success: false, message: "Too many requests. Please try again later." },
+        { status: 429, headers: { "Retry-After": "60" } }
+      );
+    }
+    userRate.count += 1;
+  } else {
+    rateLimitMap.set(ip, { count: 1, lastReset: now });
+  }
+
   let body: unknown;
 
   try {
@@ -99,7 +121,7 @@ export async function POST(request: Request) {
             process.env.RESEND_FROM ??
             "Axis Agro Website <onboarding@resend.dev>",
           to: adminEmail,
-          subject: `New Quote Request — ${data.service_type} from ${data.name}`,
+          subject: `New Quote Request: ${data.service_type} from ${data.name}`,
           html: buildEmailHtml({
             name: data.name,
             phone: data.phone,
@@ -115,7 +137,7 @@ export async function POST(request: Request) {
       }
     } else {
       console.warn(
-        "[quotes] Skipping email notification — ADMIN_EMAIL or RESEND_API_KEY not set"
+        "[quotes] Skipping email notification: ADMIN_EMAIL or RESEND_API_KEY not set"
       );
     }
 
