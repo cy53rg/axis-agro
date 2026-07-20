@@ -50,38 +50,39 @@ export function Header() {
     <>
       <header
         className={cn(
-          "sticky top-0 z-40 bg-white/95 backdrop-blur-sm transition-[box-shadow,border-color] duration-200",
-          isScrolled && "border-b border-divider shadow-sm"
+          "sticky top-0 z-40 border-b border-divider/80 bg-cream/80 backdrop-blur-md transition-[background-color,box-shadow,border-color] duration-200",
+          "supports-[backdrop-filter]:bg-cream/70",
+          isScrolled && "border-divider bg-cream/90 shadow-[0_1px_0_rgba(27,46,60,0.04),0_8px_24px_rgba(27,46,60,0.06)]"
         )}
       >
         <nav
-          className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:h-[4.5rem] sm:gap-4 sm:px-6 lg:px-8"
+          className="mx-auto flex h-[4.25rem] max-w-7xl items-center justify-between gap-3 px-4 sm:h-[5rem] sm:gap-5 sm:px-6 lg:px-8"
           aria-label="Primary"
         >
           <Link
             href="/"
-            className="flex h-full max-w-[55%] shrink-0 items-center sm:max-w-[40%] lg:max-w-none"
+            className="flex h-full max-w-[58%] shrink-0 items-center py-2 sm:max-w-[44%] lg:max-w-none"
             aria-label={`${SITE_NAME} home`}
           >
             {!logoError ? (
               <Image
                 src={SITE_LOGO_PATH}
                 alt={`${SITE_NAME} — quality livestock farm in Kaduna, Nigeria`}
-                width={200}
-                height={64}
+                width={280}
+                height={88}
                 priority
-                className="h-10 w-auto max-w-[148px] object-contain object-left sm:h-11 sm:max-w-[168px] lg:h-12 lg:max-w-[200px]"
-                sizes="(max-width: 640px) 148px, (max-width: 1024px) 168px, 200px"
+                className="h-12 w-auto max-w-[176px] object-contain object-left sm:h-14 sm:max-w-[220px] lg:h-[3.75rem] lg:max-w-[260px]"
+                sizes="(max-width: 640px) 176px, (max-width: 1024px) 220px, 260px"
                 onError={() => setLogoError(true)}
               />
             ) : (
-              <span className="font-display text-lg font-bold leading-tight text-navy sm:text-xl">
+              <span className="font-display text-xl font-bold leading-tight text-navy sm:text-2xl">
                 {SITE_NAME}
               </span>
             )}
           </Link>
 
-          <div className="hidden items-center gap-1 xl:flex">
+          <div className="hidden items-center gap-0.5 xl:flex">
             {PUBLIC_NAV_LINKS.map((link) => {
               const active = isActive(pathname, link.href);
 
@@ -90,10 +91,10 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "rounded-btn px-3 py-2 font-label text-[13px] font-semibold tracking-wide transition-colors duration-200",
+                    "rounded-btn px-3.5 py-2.5 font-label text-[13px] font-semibold tracking-wide transition-colors duration-200",
                     active
                       ? "bg-forest/10 text-forest"
-                      : "text-navy hover:bg-cream hover:text-forest"
+                      : "text-navy hover:bg-white/70 hover:text-forest"
                   )}
                 >
                   {link.label}
@@ -117,7 +118,7 @@ export function Header() {
               aria-label="Open menu"
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation"
-              className="flex min-h-11 min-w-11 items-center justify-center rounded-btn text-navy transition-colors duration-200 hover:bg-cream hover:text-forest xl:hidden"
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-btn text-navy transition-colors duration-200 hover:bg-white/70 hover:text-forest xl:hidden"
               onClick={() => setIsMobileMenuOpen(true)}
             >
               <Menu className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />

@@ -2,7 +2,6 @@
 
 import { Loader2, Search, X } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -103,21 +102,26 @@ export function HeroAnimalSearch({ className }: { className?: string }) {
     <>
       <div
         className={cn(
-          "w-full max-w-md rounded-card border border-white/20 bg-white/95 p-3 shadow-[0_8px_30px_rgba(0,0,0,0.18)] backdrop-blur-sm sm:p-4",
+          "mx-auto w-full max-w-xl rounded-card border border-white/25 bg-white/95 p-4 text-left shadow-[0_12px_40px_rgba(0,0,0,0.22)] backdrop-blur-md sm:p-5 md:max-w-2xl md:p-6",
           className
         )}
       >
-        <form onSubmit={handleSearch} className="space-y-2" noValidate>
-          <Label
-            htmlFor={inputId}
-            className="font-label text-[11px] font-semibold uppercase tracking-wider text-navy/70"
-          >
-            Find by tag number
-          </Label>
-          <div className="flex gap-2">
+        <form onSubmit={handleSearch} className="space-y-3" noValidate>
+          <div className="space-y-1">
+            <Label
+              htmlFor={inputId}
+              className="font-label text-xs font-semibold uppercase tracking-[0.14em] text-navy/75"
+            >
+              Find by tag number
+            </Label>
+            <p className="text-sm text-muted">
+              Look up active livestock by unique farm tag.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
             <div className="relative min-w-0 flex-1">
               <Search
-                className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted"
+                className="pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-muted"
                 aria-hidden="true"
               />
               <Input
@@ -135,20 +139,20 @@ export function HeroAnimalSearch({ className }: { className?: string }) {
                 spellCheck={false}
                 aria-invalid={Boolean(error)}
                 aria-describedby={error ? errorId : undefined}
-                className="h-11 min-h-11 border-divider bg-white pl-9 text-body-text"
+                className="h-14 min-h-14 border-divider bg-white pl-12 text-base font-medium tracking-wide text-body-text shadow-sm placeholder:font-normal placeholder:tracking-normal sm:text-[1.0625rem]"
               />
             </div>
             <Button
               type="submit"
               variant="primary"
-              size="md"
+              size="lg"
               disabled={isSearching}
-              className="shrink-0 px-4"
+              className="h-14 min-h-14 shrink-0 px-8 text-base sm:w-auto"
             >
               {isSearching ? (
                 <>
                   <Loader2
-                    className="h-4 w-4 animate-spin"
+                    className="h-5 w-5 animate-spin"
                     aria-hidden="true"
                   />
                   <span className="sr-only">Searching</span>
@@ -167,11 +171,7 @@ export function HeroAnimalSearch({ className }: { className?: string }) {
             >
               {error}
             </p>
-          ) : (
-            <p className="text-xs text-muted">
-              Look up active livestock by unique farm tag.
-            </p>
-          )}
+          ) : null}
         </form>
       </div>
 
