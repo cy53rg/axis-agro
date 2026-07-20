@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat, Playfair_Display } from "next/font/google";
 
+import { SITE_LOGO_PATH, SITE_NAME } from "@/constants/site";
+
 import "./globals.css";
 
 const playfairDisplay = Playfair_Display({
@@ -29,23 +31,28 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://jrnagro.ng"
   ),
   title: {
-    template: "%s | JRN Agro LTD — Kaduna Livestock Farm",
-    default: "JRN Agro LTD | Quality Livestock Farm in Kaduna, Nigeria",
+    template: `%s | ${SITE_NAME} — Kaduna Livestock Farm`,
+    default: `${SITE_NAME} | Quality Livestock Farm in Kaduna, Nigeria`,
   },
   description:
     "JRN Agro Limited is a mixed livestock and poultry farm in Kaduna, Nigeria. We raise cattle, goats, chickens, turkeys, and ducks, and offer artificial insemination services.",
   keywords:
     "JRN Agro, livestock farm Kaduna, poultry farm Nigeria, artificial insemination cattle, breeding stock Kaduna",
+  icons: {
+    icon: [{ url: SITE_LOGO_PATH, type: "image/png" }],
+    shortcut: SITE_LOGO_PATH,
+    apple: [{ url: SITE_LOGO_PATH, type: "image/png" }],
+  },
   openGraph: {
     type: "website",
     locale: "en_NG",
-    siteName: "JRN Agro LTD",
+    siteName: SITE_NAME,
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "JRN Agro LTD livestock farm in Kaduna, Nigeria",
+        alt: `${SITE_NAME} livestock farm in Kaduna, Nigeria`,
       },
     ],
   },

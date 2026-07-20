@@ -28,6 +28,14 @@ export function Header() {
   const farmLat = process.env.NEXT_PUBLIC_FARM_LAT;
   const farmLng = process.env.NEXT_PUBLIC_FARM_LNG;
   const visitUsHref = `https://maps.google.com?q=${farmLat},${farmLng}`;
+  const isHome = pathname === "/";
+  const hasDarkHero =
+    isHome ||
+    pathname === "/about" ||
+    pathname === "/what-we-do" ||
+    pathname === "/animals" ||
+    pathname === "/gallery";
+  const useLightChrome = hasDarkHero && !isScrolled;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,9 +58,12 @@ export function Header() {
     <>
       <header
         className={cn(
-          "sticky top-0 z-40 border-b border-divider/80 bg-cream/80 backdrop-blur-md transition-[background-color,box-shadow,border-color] duration-200",
-          "supports-[backdrop-filter]:bg-cream/70",
-          isScrolled && "border-divider bg-cream/90 shadow-[0_1px_0_rgba(27,46,60,0.04),0_8px_24px_rgba(27,46,60,0.06)]"
+          "fixed inset-x-0 top-0 z-40 border-b bg-transparent backdrop-blur-xl transition-[border-color,box-shadow] duration-200",
+          "supports-[backdrop-filter]:bg-transparent",
+          useLightChrome
+            ? "border-white/15 shadow-none"
+            : "border-divider/40 shadow-[0_1px_0_rgba(27,46,60,0.04)]",
+          isScrolled && "border-divider/50"
         )}
       >
         <nav
@@ -71,12 +82,17 @@ export function Header() {
                 width={280}
                 height={88}
                 priority
-                className="h-12 w-auto max-w-[176px] object-contain object-left sm:h-14 sm:max-w-[220px] lg:h-[3.75rem] lg:max-w-[260px]"
+                className="h-12 w-auto max-w-[176px] object-contain object-left drop-shadow-sm sm:h-14 sm:max-w-[220px] lg:h-[3.75rem] lg:max-w-[260px]"
                 sizes="(max-width: 640px) 176px, (max-width: 1024px) 220px, 260px"
                 onError={() => setLogoError(true)}
               />
             ) : (
-              <span className="font-display text-xl font-bold leading-tight text-navy sm:text-2xl">
+              <span
+                className={cn(
+                  "font-display text-xl font-bold leading-tight sm:text-2xl",
+                  useLightChrome ? "text-white" : "text-navy"
+                )}
+              >
                 {SITE_NAME}
               </span>
             )}
@@ -92,9 +108,13 @@ export function Header() {
                   href={link.href}
                   className={cn(
                     "rounded-btn px-3.5 py-2.5 font-label text-[13px] font-semibold tracking-wide transition-colors duration-200",
-                    active
-                      ? "bg-forest/10 text-forest"
-                      : "text-navy hover:bg-white/70 hover:text-forest"
+                    useLightChrome
+                      ? active
+                        ? "bg-white/20 text-white"
+                        : "text-white/90 hover:bg-white/10 hover:text-white"
+                      : active
+                        ? "bg-forest/10 text-forest"
+                        : "text-navy hover:bg-white/50 hover:text-forest"
                   )}
                 >
                   {link.label}
@@ -118,7 +138,12 @@ export function Header() {
               aria-label="Open menu"
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation"
-              className="flex min-h-11 min-w-11 items-center justify-center rounded-btn text-navy transition-colors duration-200 hover:bg-white/70 hover:text-forest xl:hidden"
+              className={cn(
+                "flex min-h-11 min-w-11 items-center justify-center rounded-btn transition-colors duration-200 xl:hidden",
+                useLightChrome
+                  ? "text-white hover:bg-white/10"
+                  : "text-navy hover:bg-white/50 hover:text-forest"
+              )}
               onClick={() => setIsMobileMenuOpen(true)}
             >
               <Menu className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />

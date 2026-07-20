@@ -12,7 +12,7 @@ export function HeroSection({
   imageUrl = "/hero-farm.jpg",
 }: HeroSectionProps) {
   return (
-    <section className="relative min-h-[560px] w-full overflow-hidden sm:min-h-[600px] md:min-h-[680px] md:h-[88vh]">
+    <section className="relative min-h-[100svh] w-full overflow-hidden sm:min-h-[640px] md:min-h-[720px]">
       <Image
         src={imageUrl}
         alt="Cattle and poultry grazing at JRN Agro LTD livestock farm in Kaduna, Nigeria"
@@ -27,11 +27,11 @@ export function HeroSection({
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to top, rgba(27,46,60,0.92) 0%, rgba(27,46,60,0.55) 42%, rgba(27,46,60,0.22) 68%, transparent 100%)",
+            "linear-gradient(to top, rgba(27,46,60,0.92) 0%, rgba(27,46,60,0.55) 42%, rgba(27,46,60,0.28) 68%, rgba(27,46,60,0.12) 100%)",
         }}
       />
 
-      <div className="relative z-10 mx-auto flex h-full max-w-4xl flex-col items-center justify-end px-5 pb-12 pt-28 text-center sm:px-8 sm:pb-14 md:pb-20 md:pt-32">
+      <div className="relative z-10 mx-auto flex h-full min-h-[100svh] max-w-4xl flex-col items-center justify-end px-5 pb-12 pt-28 text-center sm:min-h-[640px] sm:px-8 sm:pb-14 sm:pt-32 md:min-h-[720px] md:pb-20 md:pt-36">
         <Eyebrow color="gold">Kaduna, Nigeria</Eyebrow>
 
         <h1 className="mt-3 max-w-[18ch] font-display text-[2rem] font-bold leading-[1.1] text-white sm:max-w-none sm:text-[2.5rem] md:text-[3.75rem]">

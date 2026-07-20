@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { createClient } from "@/lib/supabase/client";
+import { compressImageForUpload } from "@/lib/images/compressImage";
 import {
   ANIMAL_SEX,
   ANIMAL_SPECIES,
@@ -90,10 +91,11 @@ export default function NewAnimalPage() {
       let photoUrl: string | null = null;
 
       if (photoFile) {
-        const storagePath = `${Date.now()}_${photoFile.name.replace(/\s+/g, "-")}`;
+        const compressedPhoto = await compressImageForUpload(photoFile);
+        const storagePath = `${Date.now()}_${compressedPhoto.name.replace(/\s+/g, "-")}`;
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from("animals")
-          .upload(storagePath, photoFile);
+          .upload(storagePath, compressedPhoto);
 
         if (uploadError || !uploadData) {
           throw new Error(uploadError?.message ?? "Photo upload failed");

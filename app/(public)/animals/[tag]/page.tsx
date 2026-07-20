@@ -79,7 +79,7 @@ export default async function AnimalProfilePage({
 
   return (
     <>
-      <section className="bg-cream py-10 md:py-16">
+      <section className="bg-cream pb-10 pt-[calc(4.25rem+1.5rem)] md:pb-16 md:pt-[calc(5rem+2rem)]">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
           <Link
             href="/animals"

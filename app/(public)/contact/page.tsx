@@ -51,7 +51,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <section className="bg-cream py-16 text-center">
+      <section className="bg-cream pb-16 pt-[calc(4.25rem+2.5rem)] text-center sm:pt-[calc(5rem+2.5rem)]">
         <div className="mx-auto max-w-[800px] px-4 sm:px-6">
           <Eyebrow>Find Us</Eyebrow>
           <h1 className="mt-3 font-display text-3xl font-bold text-navy sm:text-4xl md:text-5xl">

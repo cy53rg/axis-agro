@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 import { createClient } from "@/lib/supabase/client";
+import { compressImageForUpload } from "@/lib/images/compressImage";
 import { cn } from "@/lib/utils";
 import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import type { GalleryCategory, GalleryImage } from "@/types";
@@ -94,16 +95,20 @@ export default function AdminGalleryPage() {
     );
   };
 
-  const uploadFile = async (file: File, uploadId: string) => {
+  const uploadFile = useCallback(async (file: File, uploadId: string) => {
     const supabase = createClient();
-    const storagePath = `${Date.now()}_${file.name.replace(/\s+/g, "-")}`;
 
     try {
-      updateUploadItem(uploadId, { progress: 25 });
+      updateUploadItem(uploadId, { progress: 15 });
+
+      const compressed = await compressImageForUpload(file);
+      const storagePath = `${Date.now()}_${compressed.name.replace(/\s+/g, "-")}`;
+
+      updateUploadItem(uploadId, { progress: 35 });
 
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("gallery")
-        .upload(storagePath, file);
+        .upload(storagePath, compressed);
 
       if (uploadError || !uploadData) {
         throw new Error(uploadError?.message ?? "Upload failed");
@@ -123,7 +128,7 @@ export default function AdminGalleryPage() {
           caption: "",
           category: "General",
           is_featured: false,
-          display_order: images.length,
+          display_order: 0,
         })
         .select("*")
         .single();
@@ -142,7 +147,7 @@ export default function AdminGalleryPage() {
         error: error instanceof Error ? error.message : "Upload failed",
       });
     }
-  };
+  }, []);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -159,7 +164,7 @@ export default function AdminGalleryPage() {
         files.map((file, index) => uploadFile(file, newItems[index].id))
       );
     },
-    [images.length]
+    [uploadFile]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
