@@ -9,6 +9,8 @@ import { createClient } from "@/lib/supabase/client";
 
 const PAGE_TITLES: Record<string, string> = {
   "/admin/dashboard": "Dashboard",
+  "/admin/animals/new": "New Animal",
+  "/admin/animals": "Animals",
   "/admin/quotes": "Quote Requests",
   "/admin/gallery": "Gallery Manager",
   "/admin/services": "Services",
@@ -17,6 +19,10 @@ const PAGE_TITLES: Record<string, string> = {
 };
 
 function getPageTitle(pathname: string) {
+  if (/^\/admin\/animals\/[^/]+$/.test(pathname) && pathname !== "/admin/animals/new") {
+    return "Animal Profile";
+  }
+
   const match = Object.entries(PAGE_TITLES).find(([path]) =>
     pathname.startsWith(path)
   );

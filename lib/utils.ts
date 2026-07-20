@@ -1,4 +1,4 @@
-import { format, parseISO } from "date-fns";
+import { differenceInMonths, differenceInYears, format, parseISO } from "date-fns";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -10,6 +10,32 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatDate(dateString: string): string {
   return format(parseISO(dateString), "d MMMM yyyy");
+}
+
+export function formatAge(dateOfBirth: string | null | undefined): string {
+  if (!dateOfBirth) {
+    return "—";
+  }
+
+  try {
+    const dob = parseISO(dateOfBirth);
+    const now = new Date();
+    const years = differenceInYears(now, dob);
+
+    if (years >= 1) {
+      return years === 1 ? "1 year" : `${years} years`;
+    }
+
+    const months = differenceInMonths(now, dob);
+
+    if (months >= 1) {
+      return months === 1 ? "1 month" : `${months} months`;
+    }
+
+    return "Under 1 month";
+  } catch {
+    return "—";
+  }
 }
 
 export function formatPhone(phone: string): string {

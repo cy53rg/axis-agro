@@ -61,3 +61,96 @@ export interface SiteSetting {
   key: string;
   value: string;
 }
+
+export type AnimalStatus = "active" | "sold" | "sick" | "deceased";
+
+export type EventType =
+  | "birth"
+  | "arrival"
+  | "vaccination"
+  | "health_check"
+  | "weight_update"
+  | "status_change"
+  | "sold"
+  | "death"
+  | "other";
+
+export type AuditAction = "insert" | "update" | "delete";
+
+export interface Animal {
+  id: string;
+  tag_number: string;
+  name: string;
+  species: string;
+  breed: string;
+  sex: string;
+  date_of_birth: string;
+  arrival_date: string;
+  current_weight_kg: number;
+  status: AnimalStatus;
+  photo_url: string;
+  internal_notes: string;
+  cause_of_death: string;
+  sold_to: string;
+  sold_price: number;
+  sold_date: string;
+  is_public: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WeightLog {
+  id: string;
+  animal_id: string;
+  weight_kg: number;
+  recorded_at: string;
+  recorded_by: string;
+  notes: string;
+}
+
+export interface Vaccination {
+  id: string;
+  animal_id: string;
+  vaccine_name: string;
+  date_given: string;
+  next_due_date: string;
+  administered_by: string;
+  recorded_by: string;
+}
+
+export interface HealthCheck {
+  id: string;
+  animal_id: string;
+  check_date: string;
+  findings: string;
+  vet_name: string;
+  recorded_by: string;
+}
+
+export interface Event {
+  id: string;
+  animal_id: string;
+  event_type: EventType;
+  event_date: string;
+  notes: string;
+  is_public: boolean;
+  recorded_by: string;
+}
+
+export interface AuditLog {
+  id: string;
+  actor_id: string;
+  action: AuditAction;
+  table_name: string;
+  record_id: string;
+  before_data: Record<string, unknown>;
+  after_data: Record<string, unknown>;
+  created_at: string;
+}
+
+export interface AnimalWithHistory extends Animal {
+  weight_logs: WeightLog[];
+  vaccinations: Vaccination[];
+  health_checks: HealthCheck[];
+  events: Event[];
+}

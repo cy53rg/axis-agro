@@ -17,6 +17,7 @@ export const FOOTER_QUICK_LINKS = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },
   { href: "/what-we-do", label: "What We Do" },
+  { href: "/animals", label: "Animals" },
   { href: "/gallery", label: "Our Farm" },
   { href: "/get-a-quote", label: "Get a Quote" },
   { href: "/contact", label: "Contact" },

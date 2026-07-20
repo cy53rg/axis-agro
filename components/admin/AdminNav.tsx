@@ -7,6 +7,7 @@ import {
   List,
   LogOut,
   MessageSquare,
+  PawPrint,
   Settings,
   X,
 } from "lucide-react";
@@ -19,6 +20,7 @@ import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/animals", label: "Animals", icon: PawPrint },
   { href: "/admin/quotes", label: "Quotes", icon: MessageSquare },
   { href: "/admin/gallery", label: "Gallery", icon: Image },
   { href: "/admin/services", label: "Services", icon: List },

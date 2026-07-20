@@ -1,4 +1,11 @@
-import type { GalleryImage, QuoteStatus, Service } from "@/types";
+import type {
+  Animal,
+  Event,
+  GalleryImage,
+  QuoteStatus,
+  Service,
+  Vaccination,
+} from "@/types";
 
 import { createPublicClient } from "@/lib/supabase/public";
 import { createClient } from "@/lib/supabase/server";
@@ -8,6 +15,130 @@ const GALLERY_PUBLIC_COLUMNS =
 
 const SERVICE_PUBLIC_COLUMNS =
   "id, slug, title, description, key_points, icon_name, display_order";
+
+const ANIMAL_PUBLIC_COLUMNS =
+  "id, tag_number, name, species, breed, sex, date_of_birth, current_weight_kg, photo_url, status";
+
+const VACCINATION_PUBLIC_COLUMNS =
+  "id, vaccine_name, date_given, next_due_date, administered_by";
+
+const EVENT_PUBLIC_COLUMNS = "id, event_type, event_date, notes";
+
+export type PublicAnimal = Pick<
+  Animal,
+  | "id"
+  | "tag_number"
+  | "name"
+  | "species"
+  | "breed"
+  | "sex"
+  | "date_of_birth"
+  | "current_weight_kg"
+  | "photo_url"
+  | "status"
+>;
+
+export type PublicVaccination = Pick<
+  Vaccination,
+  "id" | "vaccine_name" | "date_given" | "next_due_date" | "administered_by"
+>;
+
+export type PublicEvent = Pick<
+  Event,
+  "id" | "event_type" | "event_date" | "notes"
+>;
+
+export interface PublicAnimalProfile {
+  animal: PublicAnimal;
+  vaccinations: PublicVaccination[];
+  events: PublicEvent[];
+}
+
+export async function getPublicAnimals(): Promise<PublicAnimal[]> {
+  try {
+    const supabase = createPublicClient();
+    const { data, error } = await supabase
+      .from("animals")
+      .select(ANIMAL_PUBLIC_COLUMNS)
+      .eq("is_public", true)
+      .in("status", ["active", "sold"])
+      .order("tag_number", { ascending: true });
+
+    if (error) {
+      console.error("[getPublicAnimals]", error.message);
+      return [];
+    }
+
+    return (data ?? []) as PublicAnimal[];
+  } catch (error) {
+    console.error("[getPublicAnimals]", error);
+    return [];
+  }
+}
+
+export async function getPublicAnimalByTag(
+  tagNumber: string
+): Promise<PublicAnimalProfile | null> {
+  try {
+    const supabase = createPublicClient();
+
+    const { data: animal, error: animalError } = await supabase
+      .from("animals")
+      .select(ANIMAL_PUBLIC_COLUMNS)
+      .eq("tag_number", tagNumber)
+      .eq("is_public", true)
+      .in("status", ["active", "sold"])
+      .maybeSingle();
+
+    if (animalError) {
+      console.error("[getPublicAnimalByTag]", animalError.message);
+      return null;
+    }
+
+    if (!animal) {
+      return null;
+    }
+
+    const publicAnimal = animal as PublicAnimal;
+
+    const [vaccinationsResult, eventsResult] = await Promise.all([
+      supabase
+        .from("vaccinations")
+        .select(VACCINATION_PUBLIC_COLUMNS)
+        .eq("animal_id", publicAnimal.id)
+        .order("date_given", { ascending: false }),
+      supabase
+        .from("events")
+        .select(EVENT_PUBLIC_COLUMNS)
+        .eq("animal_id", publicAnimal.id)
+        .eq("is_public", true)
+        .order("event_date", { ascending: false }),
+    ]);
+
+    if (vaccinationsResult.error) {
+      console.error(
+        "[getPublicAnimalByTag] vaccinations:",
+        vaccinationsResult.error.message
+      );
+    }
+
+    if (eventsResult.error) {
+      console.error(
+        "[getPublicAnimalByTag] events:",
+        eventsResult.error.message
+      );
+    }
+
+    return {
+      animal: publicAnimal,
+      vaccinations: (vaccinationsResult.data ?? []) as PublicVaccination[],
+      events: (eventsResult.data ?? []) as PublicEvent[],
+    };
+  } catch (error) {
+    console.error("[getPublicAnimalByTag]", error);
+    return null;
+  }
+}
 
 export async function getGalleryImages(
   category?: string
