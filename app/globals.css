@@ -119,6 +119,6 @@ body {
     --sidebar-ring: var(--forest);
   }
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
   }
 }

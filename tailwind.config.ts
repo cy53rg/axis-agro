@@ -31,7 +31,6 @@ const config: Config = {
         },
         destructive: {
           DEFAULT: "var(--destructive)",
-          foreground: "var(--destructive-foreground)",
         },
         accent: {
           DEFAULT: "var(--accent)",
@@ -57,6 +56,7 @@ const config: Config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "4xl": "2rem",
       },
     },
   },
