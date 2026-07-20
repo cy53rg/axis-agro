@@ -154,3 +154,17 @@ export interface AnimalWithHistory extends Animal {
   health_checks: HealthCheck[];
   events: Event[];
 }
+
+export type UserRole = "worker" | "manager" | "owner";
+
+export interface Profile {
+  id: string;
+  role: UserRole;
+  email: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AuditLogEntry extends AuditLog {
+  actor_email: string | null;
+}

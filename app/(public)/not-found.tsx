@@ -6,7 +6,7 @@ export default function PublicNotFound() {
   return (
     <div className="flex min-h-[60vh] items-center justify-center bg-cream px-4 py-16">
       <div className="max-w-lg text-center">
-        <p className="font-display text-5xl font-bold text-navy">Axis Agro</p>
+        <p className="font-display text-5xl font-bold text-navy">JRN Agro LTD</p>
         <h1 className="mt-6 font-display text-4xl font-bold text-navy">
           Page Not Found
         </h1>

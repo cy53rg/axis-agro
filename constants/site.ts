@@ -1,15 +1,29 @@
+export const SITE_NAME = "JRN Agro LTD";
+export const SITE_NAME_FORMAL = "JRN Agro Limited";
+export const SITE_RC_NUMBER = "9679462";
+export const SITE_LOGO_PATH = "/jrn-agro-logo.png";
+export const SITE_CAC_CERTIFICATE_PATH = "/CAC_certificate.png";
+
 export const SITE_CONTACT = {
   address: "Kaduna, Kaduna State, Nigeria",
   phone: "+2348000000000",
   phoneDisplay: "+234 800 000 0000",
-  email: "admin@axisagro.ng",
+  email: "admin@jrnagro.ng",
   hours: "Mon – Sat, 7:00am – 6:00pm",
 };
 
 export const SITE_SOCIAL = {
-  facebook: "https://facebook.com/axisagro",
-  instagram: "https://instagram.com/axisagro",
+  facebook: "https://facebook.com/jrnagro",
+  instagram: "https://instagram.com/jrnagro",
 };
+
+export const SITE_COMPLIANCE = {
+  legalName: SITE_NAME_FORMAL,
+  tradingName: SITE_NAME,
+  rcNumber: SITE_RC_NUMBER,
+  certificatePath: SITE_CAC_CERTIFICATE_PATH,
+  incorporatedUnder: "Companies and Allied Matters Act 2020",
+} as const;
 
 export const FOOTER_TAGLINE = "Healthy Livestock, Consistent Quality.";
 

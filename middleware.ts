@@ -1,6 +1,20 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import {
+  canAccessAnimals,
+  canAccessAuditLogs,
+} from "@/lib/auth/rbac";
+import { attachRoleToUser } from "@/lib/supabase/auth";
+import type { AppSession } from "@/types/auth";
+
+function copyCookies(from: NextResponse, to: NextResponse) {
+  from.cookies.getAll().forEach((cookie) => {
+    to.cookies.set(cookie.name, cookie.value);
+  });
+  return to;
+}
+
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
@@ -35,30 +49,95 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { pathname } = request.nextUrl;
-  let redirectUrl: string | null = null;
+  let session: AppSession | null = null;
 
-  // Handle Admin Routes Routing Logic
-  if (pathname.startsWith("/admin")) {
-    if (!user && pathname !== "/admin/login") {
-      // Unauthenticated users trying to access ANY admin page get sent to login
-      redirectUrl = "/admin/login";
-    } else if (user && (pathname === "/admin/login" || pathname === "/admin")) {
-      // Authenticated users on the login page or the base /admin route get sent to dashboard
-      redirectUrl = "/admin/dashboard";
+  if (user) {
+    const enrichedUser = await attachRoleToUser(supabase, user);
+
+    const {
+      data: { session: rawSession },
+    } = await supabase.auth.getSession();
+
+    if (rawSession) {
+      session = rawSession as AppSession;
+      session.user = enrichedUser;
     }
   }
 
-  // If a redirect is required, we must transfer the cookies from supabaseResponse
+  const { pathname } = request.nextUrl;
+  const role = session?.user.role;
+  const isApi = pathname.startsWith("/api/");
+
+  // ─── API RBAC ───────────────────────────────────────────────────────────────
+  if (pathname.startsWith("/api/admin/audit-logs")) {
+    if (!session?.user) {
+      return copyCookies(
+        supabaseResponse,
+        NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      );
+    }
+    if (!canAccessAuditLogs(role)) {
+      return copyCookies(
+        supabaseResponse,
+        NextResponse.json({ error: "Forbidden" }, { status: 403 })
+      );
+    }
+    return supabaseResponse;
+  }
+
+  if (
+    pathname.startsWith("/api/admin/animals") &&
+    (pathname.includes("/weight-logs") ||
+      pathname.includes("/vaccinations") ||
+      pathname.includes("/health-checks") ||
+      pathname.includes("/logs"))
+  ) {
+    if (!session?.user) {
+      return copyCookies(
+        supabaseResponse,
+        NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      );
+    }
+    if (!canAccessAnimals(role)) {
+      return copyCookies(
+        supabaseResponse,
+        NextResponse.json({ error: "Forbidden" }, { status: 403 })
+      );
+    }
+    return supabaseResponse;
+  }
+
+  if (isApi) {
+    return supabaseResponse;
+  }
+
+  // ─── Page RBAC ──────────────────────────────────────────────────────────────
+  let redirectUrl: string | null = null;
+
+  if (pathname.startsWith("/admin")) {
+    if (!session?.user && pathname !== "/admin/login") {
+      redirectUrl = "/admin/login";
+    } else if (
+      session?.user &&
+      (pathname === "/admin/login" || pathname === "/admin")
+    ) {
+      redirectUrl = "/admin/dashboard";
+    } else if (session?.user && pathname.startsWith("/admin/audit-logs")) {
+      if (!canAccessAuditLogs(role)) {
+        redirectUrl = "/unauthorized";
+      }
+    } else if (session?.user && pathname.startsWith("/admin/animals")) {
+      if (!canAccessAnimals(role)) {
+        redirectUrl = "/unauthorized";
+      }
+    }
+  }
+
   if (redirectUrl) {
-    const redirectResponse = NextResponse.redirect(new URL(redirectUrl, request.url));
-    
-    // CRITICAL: Prevent token drops by transferring refreshed cookies
-    supabaseResponse.cookies.getAll().forEach((cookie) => {
-      redirectResponse.cookies.set(cookie.name, cookie.value);
-    });
-    
-    return redirectResponse;
+    return copyCookies(
+      supabaseResponse,
+      NextResponse.redirect(new URL(redirectUrl, request.url))
+    );
   }
 
   return supabaseResponse;

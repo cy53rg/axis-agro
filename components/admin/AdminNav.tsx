@@ -1,10 +1,9 @@
 "use client";
 
 import {
-  FileText,
+  ClipboardList,
   Image,
   LayoutDashboard,
-  List,
   LogOut,
   MessageSquare,
   PawPrint,
@@ -13,20 +12,61 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
+import {
+  canAccessAnimals,
+  canAccessAuditLogs,
+} from "@/lib/auth/rbac";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import type { UserRole } from "@/types";
 
-const NAV_ITEMS = [
-  { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/animals", label: "Animals", icon: PawPrint },
-  { href: "/admin/quotes", label: "Quotes", icon: MessageSquare },
-  { href: "/admin/gallery", label: "Gallery", icon: Image },
-  { href: "/admin/services", label: "Services", icon: List },
-  { href: "/admin/content", label: "Content", icon: FileText },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
-] as const;
+type NavItem = {
+  href: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  visible: (role: string | null | undefined) => boolean;
+};
+
+const NAV_ITEMS: NavItem[] = [
+  {
+    href: "/admin/dashboard",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    visible: () => true,
+  },
+  {
+    href: "/admin/animals",
+    label: "Animals",
+    icon: PawPrint,
+    visible: (role) => canAccessAnimals(role),
+  },
+  {
+    href: "/admin/audit-logs",
+    label: "Audit Logs",
+    icon: ClipboardList,
+    visible: (role) => canAccessAuditLogs(role),
+  },
+  {
+    href: "/admin/quotes",
+    label: "Quotes",
+    icon: MessageSquare,
+    visible: () => true,
+  },
+  {
+    href: "/admin/gallery",
+    label: "Gallery",
+    icon: Image,
+    visible: () => true,
+  },
+  {
+    href: "/admin/settings",
+    label: "Settings",
+    icon: Settings,
+    visible: () => true,
+  },
+];
 
 function isActive(pathname: string, href: string) {
   if (href === "/admin/dashboard") {
@@ -39,21 +79,29 @@ function isActive(pathname: string, href: string) {
 interface AdminNavProps {
   mobileOpen?: boolean;
   onMobileClose?: () => void;
+  userRole?: UserRole | string | null;
 }
 
 function NavContent({
   pathname,
   onNavigate,
   onSignOut,
+  userRole,
 }: {
   pathname: string;
   onNavigate?: () => void;
   onSignOut: () => void;
+  userRole?: UserRole | string | null;
 }) {
+  const items = useMemo(
+    () => NAV_ITEMS.filter((item) => item.visible(userRole)),
+    [userRole]
+  );
+
   return (
     <>
       <nav className="flex-1 space-y-1 px-3 py-4">
-        {NAV_ITEMS.map((item) => {
+        {items.map((item) => {
           const Icon = item.icon;
           const active = isActive(pathname, item.href);
 
@@ -90,7 +138,11 @@ function NavContent({
   );
 }
 
-export function AdminNav({ mobileOpen = false, onMobileClose }: AdminNavProps) {
+export function AdminNav({
+  mobileOpen = false,
+  onMobileClose,
+  userRole = null,
+}: AdminNavProps) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -123,7 +175,6 @@ export function AdminNav({ mobileOpen = false, onMobileClose }: AdminNavProps) {
 
   useEffect(() => {
     onMobileClose?.();
-    // Close drawer when navigating; onMobileClose is stable enough from parent
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
@@ -131,12 +182,13 @@ export function AdminNav({ mobileOpen = false, onMobileClose }: AdminNavProps) {
     <>
       <aside className="hidden h-screen w-60 shrink-0 flex-col border-r border-[#E2E8F0] bg-white lg:flex">
         <div className="border-b border-[#E2E8F0] px-5 py-6">
-          <p className="font-display text-lg font-bold text-navy">Axis Agro</p>
+          <p className="font-display text-lg font-bold text-navy">JRN Agro LTD</p>
           <p className="mt-1 text-xs font-normal text-muted">Admin Panel</p>
         </div>
         <NavContent
           pathname={pathname}
           onSignOut={handleSignOut}
+          userRole={userRole}
         />
       </aside>
 
@@ -169,7 +221,7 @@ export function AdminNav({ mobileOpen = false, onMobileClose }: AdminNavProps) {
           <div className="flex items-center justify-between border-b border-[#E2E8F0] px-4 py-4">
             <div>
               <p className="font-display text-lg font-bold text-navy">
-                Axis Agro
+                JRN Agro LTD
               </p>
               <p className="text-xs text-muted">Admin Panel</p>
             </div>
@@ -186,6 +238,7 @@ export function AdminNav({ mobileOpen = false, onMobileClose }: AdminNavProps) {
             pathname={pathname}
             onNavigate={onMobileClose}
             onSignOut={handleSignOut}
+            userRole={userRole}
           />
         </aside>
       </div>

@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Eye } from "lucide-react";
 
 import { PageHero } from "@/components/pages/PageHero";
 import { Button } from "@/components/ui/Button";
 import { GoldBorderCard } from "@/components/ui/GoldBorderCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import {
+  SITE_COMPLIANCE,
+  SITE_NAME,
+  SITE_NAME_FORMAL,
+} from "@/constants/site";
 
 export const metadata: Metadata = {
   title: "About Us",
-  description:
-    "Learn about Axis Agro - our vision, mission, and approach to mixed livestock and poultry farming in Kaduna, Northern Nigeria.",
+  description: `Learn about ${SITE_NAME_FORMAL} — our vision, mission, CAC registration, and approach to mixed livestock and poultry farming in Kaduna, Northern Nigeria.`,
 };
 
 const MISSION_POINTS = [
@@ -24,7 +29,7 @@ export default function AboutPage() {
     <>
       <PageHero
         eyebrow="Our Story"
-        title="About Axis Agro"
+        title={`About ${SITE_NAME}`}
         subtitle="A livestock and poultry farm built on quality, care, and community."
         imageUrl="/about-hero.jpg"
         height="medium"
@@ -36,11 +41,11 @@ export default function AboutPage() {
 
           <div className="mt-6 space-y-6 text-[17px] font-normal leading-[1.7] text-body-text">
             <p>
-              Axis Agro is a mixed livestock and poultry farm based in Kaduna,
-              Nigeria. We raise cattle, goats, ducks, chickens, and turkeys with
-              a clear focus on producing healthy, high-performing animals for
-              meat and dairy, while maintaining a strong breeding stock
-              programme.
+              {SITE_NAME_FORMAL} is a mixed livestock and poultry farm based in
+              Kaduna, Nigeria. We raise cattle, goats, ducks, chickens, and
+              turkeys with a clear focus on producing healthy, high-performing
+              animals for meat and dairy, while maintaining a strong breeding
+              stock programme.
             </p>
             <p>
               Our approach combines good nutrition, proper housing, and modern
@@ -68,10 +73,7 @@ export default function AboutPage() {
 
           <div className="mt-16 grid grid-cols-1 gap-10 md:grid-cols-2">
             <GoldBorderCard>
-              <Eye
-                className="h-8 w-8 text-forest"
-                aria-hidden="true"
-              />
+              <Eye className="h-8 w-8 text-forest" aria-hidden="true" />
               <h3 className="mt-4 font-display text-2xl font-bold text-navy">
                 Our Vision
               </h3>
@@ -99,6 +101,55 @@ export default function AboutPage() {
                 ))}
               </ol>
             </GoldBorderCard>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white py-24" id="corporate-compliance">
+        <div className="mx-auto max-w-[1000px] px-4 sm:px-6 lg:px-8">
+          <SectionHeader
+            eyebrow="Corporate Compliance"
+            title="Registered with the Corporate Affairs Commission"
+            centered
+          />
+          <p className="mx-auto mt-4 max-w-2xl text-center text-[17px] font-normal text-body-text">
+            {SITE_COMPLIANCE.legalName} is a private company limited by shares,
+            incorporated under the {SITE_COMPLIANCE.incorporatedUnder}. Official
+            registration number:{" "}
+            <span className="font-semibold text-navy">
+              RC {SITE_COMPLIANCE.rcNumber}
+            </span>
+            .
+          </p>
+
+          <div className="mt-12 overflow-hidden rounded-card border border-[#E2E8F0] bg-cream/40 p-4 shadow-[0_2px_16px_rgba(0,0,0,0.06)] sm:p-6">
+            <div className="relative mx-auto aspect-[3/4] w-full max-w-xl">
+              <Image
+                src={SITE_COMPLIANCE.certificatePath}
+                alt={`${SITE_NAME} Certificate of Incorporation — RC ${SITE_COMPLIANCE.rcNumber}`}
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 576px"
+              />
+            </div>
+            <dl className="mx-auto mt-6 grid max-w-xl gap-3 text-sm sm:grid-cols-2">
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-muted">
+                  Legal name
+                </dt>
+                <dd className="mt-1 font-medium text-navy">
+                  {SITE_COMPLIANCE.legalName}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium uppercase tracking-wide text-muted">
+                  RC number
+                </dt>
+                <dd className="mt-1 font-medium text-navy">
+                  RC {SITE_COMPLIANCE.rcNumber}
+                </dd>
+              </div>
+            </dl>
           </div>
         </div>
       </section>

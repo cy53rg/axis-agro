@@ -4,7 +4,9 @@ import {
   FOOTER_QUICK_LINKS,
   FOOTER_SERVICES,
   FOOTER_TAGLINE,
+  SITE_COMPLIANCE,
   SITE_CONTACT,
+  SITE_NAME,
   SITE_SOCIAL,
 } from "@/constants/site";
 
@@ -16,10 +18,19 @@ export default function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <p className="font-display text-2xl font-bold text-white">
-              Axis Agro
+              {SITE_NAME}
             </p>
             <p className="text-sm font-normal text-[#9CA3AF]">
               {FOOTER_TAGLINE}
+            </p>
+            <p className="text-xs font-normal text-white/50">
+              {SITE_COMPLIANCE.legalName} · RC {SITE_COMPLIANCE.rcNumber} ·{" "}
+              <Link
+                href="/about#corporate-compliance"
+                className="underline-offset-2 hover:text-gold hover:underline"
+              >
+                View CAC certificate
+              </Link>
             </p>
             <div className="flex items-center gap-4 pt-2">
               <a
@@ -116,7 +127,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 border-t border-white/10 pt-8">
           <div className="flex flex-col items-center justify-between gap-4 text-[13px] font-normal text-white/40 sm:flex-row">
-            <p>© 2025 Axis Agro. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} {SITE_NAME}. All rights reserved.</p>
             <p>Built for Nigerian Agriculture</p>
           </div>
         </div>

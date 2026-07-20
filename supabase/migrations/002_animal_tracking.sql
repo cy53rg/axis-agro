@@ -1,4 +1,4 @@
--- Animal tracking tables for Axis Agro farm management
+-- Animal tracking tables for JRN Agro LTD farm management
 
 -- ─── Types ──────────────────────────────────────────────────────────────────────
 

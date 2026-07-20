@@ -197,8 +197,11 @@ export default async function AdminDashboardPage() {
           <Button href="/admin/quotes" variant="outline">
             View All Quotes
           </Button>
-          <Button href="/admin/content" variant="outline">
-            Edit Site Content
+          <Button href="/admin/animals" variant="outline">
+            Manage Animals
+          </Button>
+          <Button href="/admin/settings" variant="outline">
+            Site Settings
           </Button>
         </div>
       </section>

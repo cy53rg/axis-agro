@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { PublicAnimal } from "@/lib/supabase/queries";
+import { formatAnimalAge } from "@/lib/animals/age";
 import { ANIMAL_SPECIES } from "@/lib/validations/animal";
-import { cn, formatAge } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 type SpeciesFilter = "all" | (typeof ANIMAL_SPECIES)[number];
 type StatusFilter = "all" | "active" | "sold";
@@ -175,7 +176,7 @@ export function AnimalsGrid({ animals }: AnimalsGridProps) {
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src={imageSrc}
-                    alt={`${displayName} — ${animal.species} at Axis Agro farm in Kaduna`}
+                    alt={`${displayName} — ${animal.species} at JRN Agro LTD farm in Kaduna`}
                     fill
                     quality={80}
                     loading="lazy"
@@ -216,7 +217,7 @@ export function AnimalsGrid({ animals }: AnimalsGridProps) {
                     <div className="col-span-2">
                       <dt className="text-xs font-medium text-muted">Age</dt>
                       <dd className="text-body-text">
-                        {formatAge(animal.date_of_birth)}
+                        {formatAnimalAge(animal.date_of_birth)}
                       </dd>
                     </div>
                   </dl>

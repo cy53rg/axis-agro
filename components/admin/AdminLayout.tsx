@@ -5,21 +5,24 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { AdminNav } from "@/components/admin/AdminNav";
-import { createClient } from "@/lib/supabase/client";
+import { getSession } from "@/lib/supabase/client";
+import type { UserRole } from "@/types";
 
 const PAGE_TITLES: Record<string, string> = {
   "/admin/dashboard": "Dashboard",
   "/admin/animals/new": "New Animal",
   "/admin/animals": "Animals",
+  "/admin/audit-logs": "Audit Logs",
   "/admin/quotes": "Quote Requests",
   "/admin/gallery": "Gallery Manager",
-  "/admin/services": "Services",
-  "/admin/content": "Content",
   "/admin/settings": "Site Settings",
 };
 
 function getPageTitle(pathname: string) {
-  if (/^\/admin\/animals\/[^/]+$/.test(pathname) && pathname !== "/admin/animals/new") {
+  if (
+    /^\/admin\/animals\/[^/]+$/.test(pathname) &&
+    pathname !== "/admin/animals/new"
+  ) {
     return "Animal Profile";
   }
 
@@ -37,13 +40,13 @@ interface AdminLayoutProps {
 export function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const [adminEmail, setAdminEmail] = useState<string | null>(null);
+  const [adminRole, setAdminRole] = useState<UserRole | string | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
-    const supabase = createClient();
-
-    void supabase.auth.getUser().then(({ data: { user } }) => {
-      setAdminEmail(user?.email ?? null);
+    void getSession().then((session) => {
+      setAdminEmail(session?.user.email ?? null);
+      setAdminRole(session?.user.role ?? null);
     });
   }, []);
 
@@ -54,6 +57,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       <AdminNav
         mobileOpen={mobileNavOpen}
         onMobileClose={() => setMobileNavOpen(false)}
+        userRole={adminRole}
       />
 
       <div className="flex min-h-screen min-w-0 flex-1 flex-col">
@@ -74,8 +78,9 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
           <div className="flex shrink-0 items-center gap-2">
             {adminEmail ? (
-              <span className="hidden max-w-[160px] truncate text-sm text-muted sm:max-w-none md:inline">
+              <span className="hidden max-w-[200px] truncate text-sm text-muted sm:max-w-none md:inline">
                 {adminEmail}
+                {adminRole ? ` · ${adminRole}` : ""}
               </span>
             ) : null}
             <span

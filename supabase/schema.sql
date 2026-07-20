@@ -190,7 +190,7 @@ VALUES
   (
     'cattle-goats',
     'Cattle & Goat Sales',
-    'Axis Agro supplies healthy, well-managed cattle and goats from our Kaduna farm. Whether you are stocking a herd, sourcing animals for fattening, or buying for ceremonial or commercial purposes, we provide transparent pricing and guidance on breed selection and care.',
+    'JRN Agro LTD supplies healthy, well-managed cattle and goats from our Kaduna farm. Whether you are stocking a herd, sourcing animals for fattening, or buying for ceremonial or commercial purposes, we provide transparent pricing and guidance on breed selection and care.',
     '[
       "Healthy cattle and goats raised on our Kaduna farm",
       "Breed guidance for commercial, fattening, and ceremonial needs",
@@ -203,7 +203,7 @@ VALUES
   (
     'poultry',
     'Poultry Products & Supply',
-    'From day-old broiler chicks to layers, turkeys, and ducks, Axis Agro is your trusted poultry partner in northern Nigeria. We supply quality birds and practical advice to help smallholders and commercial farmers achieve strong flock performance.',
+    'From day-old broiler chicks to layers, turkeys, and ducks, JRN Agro LTD is your trusted poultry partner in northern Nigeria. We supply quality birds and practical advice to help smallholders and commercial farmers achieve strong flock performance.',
     '[
       "Broiler chicks, layers, turkeys, and ducks available",
       "Suitable for smallholders and commercial-scale operations",
@@ -216,7 +216,7 @@ VALUES
   (
     'farmer-support',
     'Farmer Support & Training',
-    'Beyond livestock sales, Axis Agro helps farmers grow with artificial insemination services, hands-on training, and ongoing advisory support. We are committed to building capacity across Kaduna and the wider region.',
+    'Beyond livestock sales, JRN Agro LTD helps farmers grow with artificial insemination services, hands-on training, and ongoing advisory support. We are committed to building capacity across Kaduna and the wider region.',
     '[
       "Artificial insemination (AI) services for improved genetics",
       "Farmer training on livestock management and best practices",
@@ -232,12 +232,12 @@ VALUES
 INSERT INTO site_settings (key, value)
 VALUES
   ('phone', '+234 800 000 0000'),
-  ('email', 'admin@axisagro.ng'),
+  ('email', 'admin@jrnagro.ng'),
   ('address', 'Kaduna, Kaduna State, Nigeria'),
   ('whatsapp', '+234 800 000 0000'),
   ('farm_hours', 'Monday – Saturday: 8:00 AM – 5:00 PM'),
-  ('facebook_url', 'https://facebook.com/axisagro'),
-  ('instagram_url', 'https://instagram.com/axisagro');
+  ('facebook_url', 'https://facebook.com/jrnagro'),
+  ('instagram_url', 'https://instagram.com/jrnagro');
 
 -- ─── Seed: site_content ───────────────────────────────────────────────────────
 
@@ -249,13 +249,13 @@ VALUES
   ),
   (
     'home_hero_subheading',
-    'Axis Agro supplies healthy cattle, goats, and poultry while helping farmers across northern Nigeria grow with training, AI services, and honest advice from our farm.'
+    'JRN Agro LTD supplies healthy cattle, goats, and poultry while helping farmers across northern Nigeria grow with training, AI services, and honest advice from our farm.'
   ),
   (
     'about_story',
-    'Axis Agro is a Kaduna-based livestock farm built on a simple promise: supply healthy animals and help farmers succeed. From cattle and goat sales to broilers, layers, turkeys, and ducks, we combine practical farm operations with farmer training and artificial insemination services. Whether you are starting out or scaling up, we are here to support you with transparent service and local expertise.'
+    'JRN Agro LTD is a Kaduna-based livestock farm built on a simple promise: supply healthy animals and help farmers succeed. From cattle and goat sales to broilers, layers, turkeys, and ducks, we combine practical farm operations with farmer training and artificial insemination services. Whether you are starting out or scaling up, we are here to support you with transparent service and local expertise.'
   ),
   (
     'footer_tagline',
-    'Axis Agro — Growing livestock, growing farmers, growing Nigeria.'
+    'JRN Agro LTD — Growing livestock, growing farmers, growing Nigeria.'
   );

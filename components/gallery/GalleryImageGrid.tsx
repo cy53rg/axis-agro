@@ -11,7 +11,7 @@ function getGalleryImageAlt(image: GalleryImage) {
     return image.caption;
   }
 
-  return `${image.category} photo from Axis Agro farm in Kaduna, Nigeria`;
+  return `${image.category} photo from JRN Agro LTD farm in Kaduna, Nigeria`;
 }
 
 export function GalleryImageGrid({ images }: GalleryImageGridProps) {

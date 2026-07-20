@@ -10,7 +10,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Our Farm Gallery",
   description:
-    "Photos from Axis Agro farm - our cattle, goats, poultry operations and farm facilities in Kaduna, Nigeria.",
+    "Photos from JRN Agro LTD farm - our cattle, goats, poultry operations and farm facilities in Kaduna, Nigeria.",
 };
 
 export default async function GalleryPage() {
@@ -26,7 +26,7 @@ export default async function GalleryPage() {
         eyebrow="Gallery"
         title="Our Farm"
         subtitle="Photos from our livestock and poultry operations in Kaduna."
-        imageUrl="/images/gallery-hero.jpg"
+        imageUrl="/hero-farm.jpg"
         height="short"
       />
 

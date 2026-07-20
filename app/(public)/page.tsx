@@ -6,17 +6,17 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { QuoteCTA } from "@/components/home/QuoteCTA";
 import { ServicesCards } from "@/components/home/ServicesCards";
 import { StatsBar } from "@/components/home/StatsBar";
-import { WhyAxisAgro } from "@/components/home/WhyAxisAgro";
+import { WhyJrnAgro } from "@/components/home/WhyJrnAgro";
 import { getFeaturedGalleryImages } from "@/lib/supabase/queries";
 
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Axis Agro | Quality Livestock Farm in Kaduna, Nigeria",
+    absolute: "JRN Agro LTD | Quality Livestock Farm in Kaduna, Nigeria",
   },
   description:
-    "Axis Agro is a mixed livestock and poultry farm in Kaduna, Nigeria. We raise cattle, goats, chickens, turkeys and ducks. AI services and farmer training available.",
+    "JRN Agro Limited is a mixed livestock and poultry farm in Kaduna, Nigeria. We raise cattle, goats, chickens, turkeys and ducks. AI services and farmer training available.",
 };
 
 export default async function HomePage() {
@@ -24,13 +24,12 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* TODO: Replace hero and about imageUrl with actual client photos */}
       <HeroSection imageUrl="/hero-farm.jpg" />
       <StatsBar />
       <AboutSnapshot imageUrl="/about-farm.jpg" />
       <ServicesCards />
       <GalleryStrip images={featuredImages} />
-      <WhyAxisAgro />
+      <WhyJrnAgro />
       <QuoteCTA />
     </>
   );

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { createClient } from "@/lib/supabase/client";
+import { SITE_LOGO_PATH, SITE_NAME } from "@/constants/site";
 import { cn } from "@/lib/utils";
 
 const inputClassName =
@@ -52,17 +53,17 @@ export default function AdminLoginPage() {
         <div className="mb-8 flex justify-center">
           {!logoError ? (
             <Image
-              src="/logo.png"
-              alt="Axis Agro — Kaduna livestock farm logo"
-              width={160}
+              src={SITE_LOGO_PATH}
+              alt={`${SITE_NAME} — Kaduna livestock farm logo`}
+              width={180}
               height={64}
-              className="h-16 w-auto"
+              className="h-14 w-auto max-w-[180px] object-contain"
               sizes="160px"
               onError={() => setLogoError(true)}
             />
           ) : (
             <span className="font-display text-2xl font-bold text-navy">
-              Axis Agro
+              {SITE_NAME}
             </span>
           )}
         </div>
@@ -71,7 +72,7 @@ export default function AdminLoginPage() {
           Admin Login
         </h1>
         <p className="mb-9 mt-2 text-center text-sm font-normal text-muted">
-          Axis Agro Management Panel
+          {SITE_NAME} Management Panel
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">

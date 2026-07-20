@@ -17,7 +17,7 @@ export default function WhatWeDoPage() {
         eyebrow="Our Services"
         title="What We Do"
         subtitle="From livestock breeding to poultry farming and farmer training."
-        imageUrl="/images/what-we-do-hero.jpg"
+        imageUrl="/about-hero.jpg"
         height="medium"
       />
 
@@ -32,8 +32,8 @@ export default function WhatWeDoPage() {
           "Herd improvement consultations",
           "Sourcing of quality breeds",
         ]}
-        imageUrl="/images/cattle.jpg"
-        imageAlt="Cattle and goats at Axis Agro farm in Kaduna"
+        imageUrl="/cattle.jpg"
+        imageAlt="Cattle and goats at JRN Agro LTD farm in Kaduna"
         imageOnLeft={true}
         bgColor="white"
         ctaText="Request a Quote"
@@ -51,8 +51,8 @@ export default function WhatWeDoPage() {
           "Ducks for meat and eggs",
           "Supply to individuals, restaurants, and markets",
         ]}
-        imageUrl="/images/poultry.jpg"
-        imageAlt="Poultry farming at Axis Agro"
+        imageUrl="/about-farm.jpg"
+        imageAlt="Poultry farming at JRN Agro LTD"
         imageOnLeft={false}
         bgColor="cream"
         ctaText="Request a Quote"
@@ -70,8 +70,8 @@ export default function WhatWeDoPage() {
           "On-farm advisory visits",
           "Support for small and medium-scale farmers",
         ]}
-        imageUrl="/images/training.jpg"
-        imageAlt="Farmer training session at Axis Agro"
+        imageUrl="/hero-farm.jpg"
+        imageAlt="Farmer training session at JRN Agro LTD"
         imageOnLeft={true}
         bgColor="white"
         ctaText="Get in Touch"

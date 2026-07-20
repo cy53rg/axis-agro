@@ -9,13 +9,13 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({
-  imageUrl = "/images/hero-farm.jpg",
+  imageUrl = "/hero-farm.jpg",
 }: HeroSectionProps) {
   return (
     <section className="relative h-[65vh] min-h-[420px] w-full overflow-hidden md:h-[90vh]">
       <Image
         src={imageUrl}
-        alt="Cattle and poultry grazing at Axis Agro livestock farm in Kaduna, Nigeria"
+        alt="Cattle and poultry grazing at JRN Agro LTD livestock farm in Kaduna, Nigeria"
         fill
         priority
         loading="eager"
@@ -39,7 +39,7 @@ export function HeroSection({
         </h1>
 
         <p className="mt-4 max-w-[580px] text-sm font-normal leading-relaxed text-white/85 sm:mt-5 sm:text-base md:text-lg">
-          Axis Agro is Kaduna&apos;s mixed livestock and poultry farm —
+          JRN Agro Limited is Kaduna&apos;s mixed livestock and poultry farm —
           specialising in healthy breeding stock, quality meat production, and
           artificial insemination services.
         </p>

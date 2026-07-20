@@ -11,7 +11,7 @@ import { SITE_CONTACT } from "@/constants/site";
 export const metadata: Metadata = {
   title: "Request a Quote",
   description:
-    "Request a quote from Axis Agro for livestock, poultry, or AI services. We serve Kaduna and Northern Nigeria.",
+    "Request a quote from JRN Agro LTD for livestock, poultry, or AI services. We serve Kaduna and Northern Nigeria.",
 };
 
 export default function GetAQuotePage() {
@@ -109,7 +109,7 @@ export default function GetAQuotePage() {
               <p className="mt-2 text-sm text-body-text">{farmAddress}</p>
               <div className="mt-4 overflow-hidden rounded-btn">
                 <iframe
-                  title="Axis Agro farm location"
+                  title="JRN Agro LTD farm location"
                   src={mapSrc}
                   width="100%"
                   height={200}

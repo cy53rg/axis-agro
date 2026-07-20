@@ -10,7 +10,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Our Animals",
   description:
-    "Browse Axis Agro livestock currently on the farm and available for sale — cattle, goats, and poultry in Kaduna, Nigeria.",
+    "Browse JRN Agro LTD livestock currently on the farm and available for sale — cattle, goats, and poultry in Kaduna, Nigeria.",
 };
 
 export default async function AnimalsPage() {

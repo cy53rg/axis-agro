@@ -26,26 +26,26 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://axisagro.ng"
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://jrnagro.ng"
   ),
   title: {
-    template: "%s | Axis Agro — Kaduna Livestock Farm",
-    default: "Axis Agro | Quality Livestock Farm in Kaduna, Nigeria",
+    template: "%s | JRN Agro LTD — Kaduna Livestock Farm",
+    default: "JRN Agro LTD | Quality Livestock Farm in Kaduna, Nigeria",
   },
   description:
-    "Axis Agro is a mixed livestock and poultry farm in Kaduna, Nigeria. We raise cattle, goats, chickens, turkeys, and ducks, and offer artificial insemination services.",
+    "JRN Agro Limited is a mixed livestock and poultry farm in Kaduna, Nigeria. We raise cattle, goats, chickens, turkeys, and ducks, and offer artificial insemination services.",
   keywords:
-    "livestock farm Kaduna, poultry farm Nigeria, artificial insemination cattle, breeding stock Kaduna",
+    "JRN Agro, livestock farm Kaduna, poultry farm Nigeria, artificial insemination cattle, breeding stock Kaduna",
   openGraph: {
     type: "website",
     locale: "en_NG",
-    siteName: "Axis Agro",
+    siteName: "JRN Agro LTD",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Axis Agro livestock farm in Kaduna, Nigeria",
+        alt: "JRN Agro LTD livestock farm in Kaduna, Nigeria",
       },
     ],
   },

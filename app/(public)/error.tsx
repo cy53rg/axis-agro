@@ -27,7 +27,7 @@ export default function PublicError({
         </div>
 
         <div className="mt-10 rounded-lg bg-white p-6 text-left shadow-sm">
-          <p className="text-sm font-medium text-navy">Reach Axis Agro</p>
+          <p className="text-sm font-medium text-navy">Reach JRN Agro LTD</p>
           <p className="mt-3 text-sm text-body-text">
             <a
               href={`tel:${SITE_CONTACT.phone}`}

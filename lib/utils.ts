@@ -1,7 +1,8 @@
-import { differenceInMonths, differenceInYears, format, parseISO } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import { formatAnimalAge } from "@/lib/animals/age";
 import type { QuoteStatus } from "../types";
 
 export function cn(...inputs: ClassValue[]) {
@@ -12,30 +13,12 @@ export function formatDate(dateString: string): string {
   return format(parseISO(dateString), "d MMMM yyyy");
 }
 
+/**
+ * Dynamically computes age from date_of_birth (years, months, days).
+ * Prefer importing formatAnimalAge / getAnimalAge from @/lib/animals/age for new code.
+ */
 export function formatAge(dateOfBirth: string | null | undefined): string {
-  if (!dateOfBirth) {
-    return "—";
-  }
-
-  try {
-    const dob = parseISO(dateOfBirth);
-    const now = new Date();
-    const years = differenceInYears(now, dob);
-
-    if (years >= 1) {
-      return years === 1 ? "1 year" : `${years} years`;
-    }
-
-    const months = differenceInMonths(now, dob);
-
-    if (months >= 1) {
-      return months === 1 ? "1 month" : `${months} months`;
-    }
-
-    return "Under 1 month";
-  } catch {
-    return "—";
-  }
+  return formatAnimalAge(dateOfBirth);
 }
 
 export function formatPhone(phone: string): string {

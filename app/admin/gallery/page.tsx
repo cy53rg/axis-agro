@@ -389,7 +389,7 @@ export default function AdminGalleryPage() {
                   src={image.url}
                   alt={
                     image.caption ||
-                    `${image.category} photo at Axis Agro farm`
+                    `${image.category} photo at JRN Agro LTD farm`
                   }
                   fill
                   quality={80}

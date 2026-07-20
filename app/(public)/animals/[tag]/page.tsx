@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 
 import { Button } from "@/components/ui/Button";
 import { getPublicAnimalByTag } from "@/lib/supabase/queries";
-import { formatAge, formatDate } from "@/lib/utils";
+import { formatAnimalAge } from "@/lib/animals/age";
+import { formatDate } from "@/lib/utils";
 import type { AnimalStatus, EventType } from "@/types";
 
 export const revalidate = 3600;
@@ -74,7 +75,7 @@ export async function generateMetadata({
 
   return {
     title: `${displayName} (${animal.tag_number})`,
-    description: `${animal.species}${animal.breed ? ` · ${animal.breed}` : ""} at Axis Agro farm in Kaduna, Nigeria.`,
+    description: `${animal.species}${animal.breed ? ` · ${animal.breed}` : ""} at JRN Agro LTD farm in Kaduna, Nigeria.`,
   };
 }
 
@@ -107,7 +108,7 @@ export default async function AnimalProfilePage({
             <div className="relative aspect-[4/3] overflow-hidden rounded-card bg-navy/10 shadow-[0_2px_16px_rgba(0,0,0,0.07)]">
               <Image
                 src={imageSrc}
-                alt={`${displayName} — ${animal.species} at Axis Agro farm in Kaduna`}
+                alt={`${displayName} — ${animal.species} at JRN Agro LTD farm in Kaduna`}
                 fill
                 priority
                 quality={85}
@@ -161,7 +162,7 @@ export default async function AnimalProfilePage({
                     Age
                   </dt>
                   <dd className="mt-1 text-sm font-medium text-navy">
-                    {formatAge(animal.date_of_birth)}
+                    {formatAnimalAge(animal.date_of_birth)}
                   </dd>
                 </div>
                 <div>

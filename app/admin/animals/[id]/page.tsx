@@ -21,7 +21,7 @@ import {
   type VaccinationFormData,
   type WeightLogFormData,
 } from "@/lib/validations/animal";
-import { cn, formatDate } from "@/lib/utils";
+import { cn, formatAge, formatDate } from "@/lib/utils";
 import type {
   Animal,
   AnimalStatus,
@@ -266,31 +266,26 @@ export default function AnimalDetailPage() {
 
   const onAddWeight = async (data: WeightLogFormData) => {
     setFormMessage(null);
-    const supabase = createClient();
-    const recordedBy = await getUserId();
-    const weightKg = Number(data.weight_kg);
-    const recordedAt = data.recorded_at
-      ? new Date(data.recorded_at).toISOString()
-      : new Date().toISOString();
 
-    const { error } = await supabase.from("weight_logs").insert({
-      animal_id: animalId,
-      weight_kg: weightKg,
-      recorded_at: recordedAt,
-      notes: data.notes || null,
-      recorded_by: recordedBy,
-    });
+    const response = await fetch(
+      `/api/admin/animals/${animalId}/weight-logs`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
 
-    if (error) {
-      console.error("[admin/animals/[id]] weight log failed:", error.message);
-      setFormMessage("Could not save weight log. Please try again.");
+    if (response.status === 401 || response.status === 403) {
+      setFormMessage("You do not have permission to add weight logs.");
       return;
     }
 
-    await supabase
-      .from("animals")
-      .update({ current_weight_kg: weightKg })
-      .eq("id", animalId);
+    if (!response.ok) {
+      console.error("[admin/animals/[id]] weight log failed:", response.status);
+      setFormMessage("Could not save weight log. Please try again.");
+      return;
+    }
 
     weightForm.reset({ weight_kg: "", recorded_at: "", notes: "" });
     setFormMessage("Weight log added.");
@@ -299,20 +294,26 @@ export default function AnimalDetailPage() {
 
   const onAddVaccination = async (data: VaccinationFormData) => {
     setFormMessage(null);
-    const supabase = createClient();
-    const recordedBy = await getUserId();
 
-    const { error } = await supabase.from("vaccinations").insert({
-      animal_id: animalId,
-      vaccine_name: data.vaccine_name,
-      date_given: data.date_given,
-      next_due_date: data.next_due_date || null,
-      administered_by: data.administered_by || null,
-      recorded_by: recordedBy,
-    });
+    const response = await fetch(
+      `/api/admin/animals/${animalId}/vaccinations`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
 
-    if (error) {
-      console.error("[admin/animals/[id]] vaccination failed:", error.message);
+    if (response.status === 401 || response.status === 403) {
+      setFormMessage("You do not have permission to add vaccinations.");
+      return;
+    }
+
+    if (!response.ok) {
+      console.error(
+        "[admin/animals/[id]] vaccination failed:",
+        response.status
+      );
       setFormMessage("Could not save vaccination. Please try again.");
       return;
     }
@@ -329,19 +330,26 @@ export default function AnimalDetailPage() {
 
   const onAddHealthCheck = async (data: HealthCheckFormData) => {
     setFormMessage(null);
-    const supabase = createClient();
-    const recordedBy = await getUserId();
 
-    const { error } = await supabase.from("health_checks").insert({
-      animal_id: animalId,
-      check_date: data.check_date,
-      findings: data.findings || null,
-      vet_name: data.vet_name || null,
-      recorded_by: recordedBy,
-    });
+    const response = await fetch(
+      `/api/admin/animals/${animalId}/health-checks`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
 
-    if (error) {
-      console.error("[admin/animals/[id]] health check failed:", error.message);
+    if (response.status === 401 || response.status === 403) {
+      setFormMessage("You do not have permission to add health checks.");
+      return;
+    }
+
+    if (!response.ok) {
+      console.error(
+        "[admin/animals/[id]] health check failed:",
+        response.status
+      );
       setFormMessage("Could not save health check. Please try again.");
       return;
     }
@@ -550,6 +558,12 @@ export default function AnimalDetailPage() {
                 {animal.current_weight_kg != null
                   ? `${animal.current_weight_kg} kg`
                   : "—"}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-muted">Age</p>
+              <p className="text-sm text-body-text">
+                {formatAge(animal.date_of_birth)}
               </p>
             </div>
             <div>

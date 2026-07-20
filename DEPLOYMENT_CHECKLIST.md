@@ -1,19 +1,16 @@
-# Axis Agro — Deployment Checklist
+# JRN Agro LTD — Deployment Checklist
 
 Use this checklist before and after deploying to Vercel.
 
 ## Content & Assets
 
-- [ ] Real farm photos added to `/public/images/`
+- [ ] Real farm photos present in `/public/`:
   - [ ] `hero-farm.jpg`
   - [ ] `about-farm.jpg`
   - [ ] `about-hero.jpg`
-  - [ ] `what-we-do-hero.jpg`
-  - [ ] `gallery-hero.jpg`
   - [ ] `cattle.jpg`
-  - [ ] `poultry.jpg`
-  - [ ] `training.jpg`
-- [ ] Logo added at `/public/logo.png`
+- [ ] Logo at `/public/jrn-agro-logo.png`
+- [ ] CAC certificate at `/public/CAC_certificate.png` (RC 9679462 shown on `/about`)
 - [ ] Actual phone number in `site_settings` (Admin → Settings)
 - [ ] Actual email address in `site_settings`
 - [ ] Actual farm address and coordinates set (`NEXT_PUBLIC_FARM_*` env vars + Admin → Settings)

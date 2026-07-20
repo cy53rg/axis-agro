@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { AdminErrorState } from "@/components/admin/AdminErrorState";
 import { createClient } from "@/lib/supabase/client";
-import { cn, formatDate } from "@/lib/utils";
+import { cn, formatAge, formatDate } from "@/lib/utils";
 import type { Animal, AnimalStatus } from "@/types";
 
 type SpeciesFilter = "all" | string;
@@ -297,6 +297,9 @@ export default function AdminAnimalsPage() {
                     Weight
                   </th>
                   <th className="px-4 py-3 text-sm font-medium text-muted">
+                    Age
+                  </th>
+                  <th className="px-4 py-3 text-sm font-medium text-muted">
                     DOB
                   </th>
                 </tr>
@@ -374,6 +377,14 @@ export default function AdminAnimalsPage() {
                         )}
                       >
                         {formatWeight(animal.current_weight_kg)}
+                      </td>
+                      <td
+                        className={cn(
+                          "px-4 py-4 text-sm",
+                          isMuted ? "text-muted" : "text-body-text"
+                        )}
+                      >
+                        {formatAge(animal.date_of_birth)}
                       </td>
                       <td
                         className={cn(

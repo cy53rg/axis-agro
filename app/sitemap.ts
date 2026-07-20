@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://axisagro.ng";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://jrnagro.ng";
 
 const publicRoutes = [
   "",

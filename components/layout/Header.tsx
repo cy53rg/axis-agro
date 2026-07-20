@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { MobileNav, type NavLink } from "@/components/layout/MobileNav";
+import { SITE_LOGO_PATH, SITE_NAME } from "@/constants/site";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS: NavLink[] = [
@@ -61,21 +62,26 @@ export function Header() {
           isScrolled && "border-b border-divider shadow-sm"
         )}
       >
-        <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-6 lg:px-8">
-          <Link href="/" className="flex shrink-0 items-center">
+        <nav className="mx-auto flex h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 sm:h-20 sm:px-6 lg:h-[5.5rem] lg:px-8">
+          <Link
+            href="/"
+            className="flex h-full max-w-[46%] shrink-0 items-center sm:max-w-none"
+            aria-label={`${SITE_NAME} home`}
+          >
             {!logoError ? (
               <Image
-                src="/logo.png"
-                alt="Axis Agro — quality livestock farm in Kaduna, Nigeria"
-                width={140}
-                height={48}
-                className="h-9 w-auto sm:h-10 md:h-12"
-                sizes="(max-width: 768px) 120px, 140px"
+                src={SITE_LOGO_PATH}
+                alt={`${SITE_NAME} — quality livestock farm in Kaduna, Nigeria`}
+                width={200}
+                height={64}
+                priority
+                className="h-11 w-auto max-w-[160px] object-contain object-left sm:h-12 sm:max-w-[180px] md:h-14 md:max-w-[220px] lg:h-16 lg:max-w-[240px]"
+                sizes="(max-width: 640px) 160px, (max-width: 1024px) 200px, 240px"
                 onError={() => setLogoError(true)}
               />
             ) : (
               <span className="font-display text-lg font-bold text-navy sm:text-xl">
-                Axis Agro
+                {SITE_NAME}
               </span>
             )}
           </Link>

@@ -1,10 +1,10 @@
-# Axis Agro Website
+# JRN Agro LTD Website
 
-Public website and admin panel for **Axis Agro** — a mixed livestock and poultry farm in Kaduna, Nigeria.
+Public website and admin panel for **JRN Agro LTD** — a mixed livestock and poultry farm in Kaduna, Nigeria.
 
 ## 1. Project Overview
 
-This is the marketing and operations site for Axis Agro. Visitors can learn about services, browse the farm gallery, request quotes, and find contact/directions. Farm staff use a password-protected admin panel to manage quotes, gallery images, and site settings.
+This is the marketing and operations site for JRN Agro Limited. Visitors can learn about services, browse the farm gallery, request quotes, and find contact/directions. Farm staff use a password-protected admin panel to manage quotes, gallery images, animals, and site settings.
 
 ### Tech stack
 
@@ -23,13 +23,15 @@ This is the marketing and operations site for Axis Agro. Visitors can learn abou
 | Route | Purpose |
 |---|---|
 | `/` | Homepage |
-| `/about` | Farm story, vision & mission |
+| `/about` | Farm story, vision, mission & CAC compliance |
 | `/what-we-do` | Services detail |
+| `/animals` | Public animal listings |
 | `/gallery` | Photo gallery |
 | `/get-a-quote` | Quote request form |
 | `/contact` | Contact info & map |
 | `/admin/login` | Admin sign-in |
 | `/admin/dashboard` | Admin overview |
+| `/admin/animals` | Animal tracking |
 | `/admin/quotes` | Manage quote requests |
 | `/admin/gallery` | Upload & manage photos |
 | `/admin/settings` | Site contact & location settings |
@@ -167,7 +169,7 @@ In Vercel → **Project → Settings → Environment Variables**, add every vari
 | `NEXT_PUBLIC_SUPABASE_URL` | Yes | |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | |
 | `SUPABASE_SERVICE_ROLE_KEY` | Yes | Server only |
-| `NEXT_PUBLIC_SITE_URL` | Yes | e.g. `https://axisagro.ng` |
+| `NEXT_PUBLIC_SITE_URL` | Yes | e.g. `https://jrnagro.ng` |
 | `NEXT_PUBLIC_FARM_LAT` | Yes | |
 | `NEXT_PUBLIC_FARM_LNG` | Yes | |
 | `NEXT_PUBLIC_FARM_ADDRESS` | Yes | |
@@ -191,7 +193,7 @@ Apply to **Production**, **Preview**, and **Development** environments as needed
 ### 5.4 Custom domain
 
 1. Vercel → **Project → Settings → Domains**
-2. Add your domain (e.g. `axisagro.ng`)
+2. Add your domain (e.g. `jrnagro.ng`)
 3. Update DNS records as instructed by Vercel
 4. Set `NEXT_PUBLIC_SITE_URL` to your production domain
 5. Redeploy
@@ -213,7 +215,7 @@ Sign in at `/admin/login`, then use:
 
 ### Static images
 
-Hero and service section images are static files in `/public/images/`. Replace these files directly (same filenames) or update the paths in the page components. See **Before Going Live** below.
+Hero and service section images are static files in `/public/`. Replace these files directly (same filenames) or update the paths in the page components. See **Before Going Live** below.
 
 ### Database-driven content
 
@@ -227,15 +229,15 @@ Complete these items before pointing a real domain at the site:
 
 ### Code TODOs
 
-- [ ] **`app/(public)/page.tsx`** — Replace placeholder hero and about images (`/images/hero-farm.jpg`, `/images/about-farm.jpg`) with real farm photos
-- [ ] **Placeholder image files** — Add all images to `/public/images/`:
+- [ ] **`app/(public)/page.tsx`** — Confirm hero and about images (`/hero-farm.jpg`, `/about-farm.jpg`) are final farm photos
+- [ ] **Static image files** — Ensure these exist under `/public/`:
   - `hero-farm.jpg` (homepage hero)
   - `about-farm.jpg` (homepage about section)
   - `about-hero.jpg` (about page hero)
-  - `what-we-do-hero.jpg` (services page hero)
-  - `gallery-hero.jpg` (gallery page hero)
-  - `cattle.jpg`, `poultry.jpg`, `training.jpg` (service blocks)
-- [ ] **`/public/logo.png`** — Add the Axis Agro logo (used in header and admin login)
+  - `cattle.jpg` (services / animals fallback)
+  - `jrn-agro-logo.png` (header and admin login)
+  - `CAC_certificate.png` (About → Corporate Compliance)
+- [ ] **`/public/jrn-agro-logo.png`** — Confirm the JRN Agro LTD logo is present
 
 ### Placeholder contact data
 
@@ -244,10 +246,6 @@ Complete these items before pointing a real domain at the site:
   - Phone, email, address, WhatsApp
   - Facebook and Instagram URLs
 - [ ] **Environment variables** — Set real `NEXT_PUBLIC_FARM_LAT`, `NEXT_PUBLIC_FARM_LNG`, `NEXT_PUBLIC_FARM_ADDRESS`
-
-### Missing admin pages
-
-- [ ] **`/admin/services`** and **`/admin/content`** — Linked in admin nav but not yet built; links will 404 until implemented
 
 ### Infrastructure
 
@@ -261,7 +259,7 @@ See [DEPLOYMENT_CHECKLIST.md](./DEPLOYMENT_CHECKLIST.md) for the full pre-launch
 
 ## Project location
 
-This is a standalone Next.js project for the Axis Agro website. Open this folder in your editor:
+This is a standalone Next.js project for the JRN Agro LTD website. Open this folder in your editor:
 
 ```
 new-axis-agro/axis-agro

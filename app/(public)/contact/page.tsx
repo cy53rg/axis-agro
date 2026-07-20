@@ -9,7 +9,7 @@ import { SITE_CONTACT } from "@/constants/site";
 export const metadata: Metadata = {
   title: "Contact & Visit",
   description:
-    "Get in touch with Axis Agro. Visit our farm in Kaduna or contact us by phone, WhatsApp, or email.",
+    "Get in touch with JRN Agro LTD. Visit our farm in Kaduna or contact us by phone, WhatsApp, or email.",
 };
 
 const BUSINESS_HOURS = [

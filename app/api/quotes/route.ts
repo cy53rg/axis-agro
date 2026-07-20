@@ -119,7 +119,7 @@ export async function POST(request: Request) {
         await resend.emails.send({
           from:
             process.env.RESEND_FROM ??
-            "Axis Agro Website <onboarding@resend.dev>",
+            "JRN Agro LTD Website <onboarding@resend.dev>",
           to: adminEmail,
           subject: `New Quote Request: ${data.service_type} from ${data.name}`,
           html: buildEmailHtml({

@@ -27,7 +27,7 @@ const FEATURES = [
   },
 ] as const;
 
-export function WhyAxisAgro() {
+export function WhyJrnAgro() {
   return (
     <section className="bg-forest py-24">
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">

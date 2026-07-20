@@ -9,7 +9,7 @@ interface AboutSnapshotProps {
 }
 
 export function AboutSnapshot({
-  imageUrl = "/images/about-farm.jpg",
+  imageUrl = "/about-farm.jpg",
 }: AboutSnapshotProps) {
   return (
     <section className="bg-cream py-16 md:py-24">
@@ -18,7 +18,7 @@ export function AboutSnapshot({
           <div className="relative order-1 aspect-[4/3] overflow-hidden rounded-card shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
             <Image
               src={imageUrl}
-              alt="Livestock and poultry at Axis Agro farm in Kaduna, Nigeria"
+              alt="Livestock and poultry at JRN Agro LTD farm in Kaduna, Nigeria"
               fill
               loading="lazy"
               className="object-cover"

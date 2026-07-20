@@ -29,7 +29,7 @@ export function PageHero({
   height = "medium",
 }: PageHeroProps) {
   const alt =
-    imageAlt ?? `${title} at Axis Agro livestock farm in Kaduna, Nigeria`;
+    imageAlt ?? `${title} at JRN Agro LTD livestock farm in Kaduna, Nigeria`;
 
   return (
     <section
