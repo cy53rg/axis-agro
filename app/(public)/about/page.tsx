@@ -15,13 +15,13 @@ import {
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: `Learn about ${SITE_NAME_FORMAL} — our vision, mission, CAC registration, and approach to mixed livestock and poultry farming in Kaduna, Northern Nigeria.`,
+  description: `Learn about ${SITE_NAME_FORMAL}, our vision, mission, CAC registration, and genetically enhanced livestock programmes serving farms across Nigeria.`,
 };
 
 const MISSION_POINTS = [
-  "Raise healthy, high-performing livestock through good nutrition, proper housing, and modern breeding techniques including AI.",
-  "Deliver consistent quality through strict health and record-keeping practices.",
-  "Train and support local farmers with practical knowledge.",
+  "Raise healthy, high performing, genetically enhanced livestock through good nutrition, proper housing, and modern breeding techniques including AI.",
+  "Deliver consistent quality through strict health and record keeping practices.",
+  "Train and support farmers nationwide with practical knowledge.",
   "Grow profitably and sustainably by reducing waste and protecting animal welfare.",
 ] as const;
 
@@ -45,20 +45,20 @@ export default function AboutPage() {
               <p>
                 {SITE_NAME_FORMAL} is a mixed livestock and poultry farm based in
                 Kaduna, Nigeria. We raise cattle, goats, ducks, chickens, and
-                turkeys with a clear focus on producing healthy, high-performing
-                animals for meat and dairy, while maintaining a strong breeding
-                stock programme.
+                turkeys with a clear focus on producing healthy, genetically
+                enhanced animals for meat and dairy, while maintaining a strong
+                breeding stock programme that serves farms across Nigeria.
               </p>
               <p>
                 Our approach combines good nutrition, proper housing, and modern
-                breeding techniques — including artificial insemination — to ensure
+                breeding techniques, including artificial insemination, to ensure
                 our animals are not just healthy but productive. We believe the
                 quality of an animal starts long before it reaches the market.
               </p>
               <p>
-                Beyond our own production, we actively support local farmers
-                through practical training in livestock management, AI techniques,
-                and farm record-keeping. Kaduna&apos;s agricultural community grows
+                Beyond our own production, we actively support farmers through
+                practical training in livestock management, AI techniques, and
+                farm record keeping. Nigeria&apos;s agricultural community grows
                 stronger when knowledge is shared.
               </p>
             </div>
@@ -83,9 +83,10 @@ export default function AboutPage() {
                     Our Vision
                   </h3>
                   <p className="mt-4 text-base font-normal leading-relaxed text-body-text">
-                    To be Kaduna&apos;s leading livestock farm for healthy breeding
-                    stock and sustainable meat and dairy production, setting the
-                    standard for quality, innovation, and trust in Northern Nigeria.
+                    To be Nigeria&apos;s trusted livestock partner for genetically
+                    enhanced breeding stock and sustainable meat and dairy
+                    production, setting the standard for quality, innovation, and
+                    trust nationwide.
                   </p>
                 </GoldBorderCard>
               </FadeIn>
@@ -136,7 +137,7 @@ export default function AboutPage() {
               <div className="relative mx-auto aspect-[3/4] w-full max-w-xl">
                 <Image
                   src={SITE_COMPLIANCE.certificatePath}
-                  alt={`${SITE_NAME} Certificate of Incorporation — RC ${SITE_COMPLIANCE.rcNumber}`}
+                  alt={`${SITE_NAME} Certificate of Incorporation, RC ${SITE_COMPLIANCE.rcNumber}`}
                   fill
                   className="object-contain"
                   sizes="(max-width: 768px) 100vw, 576px"
@@ -172,8 +173,8 @@ export default function AboutPage() {
               Discover Our Services
             </h2>
             <p className="mt-4 text-[17px] font-normal text-white/70">
-              We offer livestock sales, poultry farming, artificial insemination
-              services, and farmer training.
+              We offer genetically enhanced livestock sales, poultry farming,
+              artificial insemination services, and farmer training across Nigeria.
             </p>
             <div className="mt-10">
               <Button

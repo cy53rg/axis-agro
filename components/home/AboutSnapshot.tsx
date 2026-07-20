@@ -34,10 +34,10 @@ export function AboutSnapshot({
 
             <p className="mt-6 text-[17px] font-normal leading-[1.7] text-body-text">
               We raise cattle, goats, chickens, turkeys, and ducks with a focus
-              on health, proper nutrition, and modern breeding techniques. Our
-              artificial insemination services help local herds perform better,
-              and our training programmes pass that knowledge on to farmers
-              across Kaduna State.
+              on health, proper nutrition, and genetically enhanced breeding
+              programmes. Our artificial insemination services help herds perform
+              better, and our training programmes pass that knowledge on to
+              farmers across Nigeria.
             </p>
 
             <Link

@@ -1,12 +1,12 @@
 "use client";
 
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { SiteLogo } from "@/components/brand/SiteLogo";
 import { createClient } from "@/lib/supabase/client";
-import { SITE_NAME } from "@/constants/site";
+import { SITE_LOGO_PATH, SITE_NAME } from "@/constants/site";
 import { cn } from "@/lib/utils";
 
 const inputClassName =
@@ -19,6 +19,7 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [logoError, setLogoError] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -50,7 +51,21 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-cream px-4 py-12">
       <div className="w-full max-w-[420px] rounded-card bg-white p-12 shadow-[0_8px_32px_rgba(0,0,0,0.10)]">
         <div className="mb-8 flex justify-center">
-          <SiteLogo tone="brand" className="h-14 w-auto max-w-[220px]" />
+          {!logoError ? (
+            <Image
+              src={SITE_LOGO_PATH}
+              alt={`${SITE_NAME} Kaduna livestock farm logo`}
+              width={180}
+              height={64}
+              className="h-14 w-auto max-w-[180px] object-contain"
+              sizes="160px"
+              onError={() => setLogoError(true)}
+            />
+          ) : (
+            <span className="font-display text-2xl font-bold text-navy">
+              {SITE_NAME}
+            </span>
+          )}
         </div>
 
         <h1 className="text-center font-display text-[28px] font-bold text-navy">

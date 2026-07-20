@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 };
 
 const BUSINESS_HOURS = [
-  { day: "Monday – Friday", hours: "7:00 AM – 6:00 PM" },
-  { day: "Saturday", hours: "7:00 AM – 4:00 PM" },
+  { day: "Monday to Friday", hours: "7:00 AM to 6:00 PM" },
+  { day: "Saturday", hours: "7:00 AM to 4:00 PM" },
   { day: "Sunday", hours: "Closed" },
 ] as const;
 
@@ -87,7 +87,7 @@ export default function ContactPage() {
                       {SITE_CONTACT.phoneDisplay}
                     </a>
                   }
-                  sub="Mon – Sat, 7:00am – 6:00pm"
+                  sub="Mon to Sat, 7:00am to 6:00pm"
                 />
 
                 <ContactItem

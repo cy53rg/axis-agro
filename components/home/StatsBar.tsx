@@ -10,13 +10,13 @@ const STATS = [
   },
   {
     icon: Dna,
-    label: "AI Services",
-    sub: "Artificial Insemination Available",
+    label: "Enhanced Breeds",
+    sub: "Genetically Improved Livestock",
   },
   {
     icon: MapPin,
     label: "Kaduna Based",
-    sub: "Serving Northern Nigeria",
+    sub: "Serving Farms Across Nigeria",
   },
   {
     icon: GraduationCap,

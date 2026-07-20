@@ -41,9 +41,10 @@ export function HeroSection({
         </h1>
 
         <p className="mt-4 max-w-[36rem] text-sm font-normal leading-relaxed text-white/85 sm:mt-5 sm:text-base md:text-lg">
-          JRN Agro Limited is Kaduna&apos;s mixed livestock and poultry farm —
-          specialising in healthy breeding stock, quality meat production, and
-          artificial insemination services.
+          JRN Agro Limited is Kaduna&apos;s mixed livestock and poultry farm,
+          specialising in genetically enhanced breeding stock, quality meat
+          production, and artificial insemination services for farms across
+          Nigeria.
         </p>
 
         <HeroAnimalSearch className="mt-7 w-full sm:mt-8" />

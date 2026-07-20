@@ -9,19 +9,19 @@ const SERVICES = [
   {
     icon: Beef,
     title: "Cattle & Goats",
-    body: "We breed and supply high-quality cattle and goats for beef production and breeding purposes. Our AI services improve herd genetics for better productivity.",
+    body: "We breed and supply genetically enhanced cattle and goats for beef production and breeding programmes. Our AI services strengthen herd genetics for better productivity across Nigeria.",
     href: "/what-we-do",
   },
   {
     icon: Bird,
     title: "Poultry Farming",
-    body: "Broilers, layers, turkeys, and ducks — raised for quality meat and eggs. We supply individuals, restaurants, and commercial buyers with fresh poultry produce.",
+    body: "Broilers, layers, turkeys, and ducks raised for quality meat and eggs. We supply individuals, restaurants, and commercial buyers with fresh poultry produce.",
     href: "/what-we-do",
   },
   {
     icon: GraduationCap,
     title: "Farmer Training & Support",
-    body: "We train small and medium-scale farmers in practical livestock management, AI techniques, and farm record-keeping to improve their operations.",
+    body: "We train small and medium scale farmers nationwide in practical livestock management, AI techniques, and farm record keeping to improve their operations.",
     href: "/what-we-do",
   },
 ] as const;

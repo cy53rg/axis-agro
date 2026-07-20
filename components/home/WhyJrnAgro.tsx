@@ -7,13 +7,13 @@ import { cn } from "@/lib/utils";
 const FEATURES = [
   {
     icon: Heart,
-    title: "Health-First Breeding",
+    title: "Health First Breeding",
     body: "Proper nutrition, housing, and veterinary care for all our animals.",
   },
   {
     icon: Dna,
-    title: "Modern AI Services",
-    body: "Improving herd genetics through professional artificial insemination.",
+    title: "Genetically Enhanced Breeds",
+    body: "We develop and supply genetically enhanced livestock through selective breeding and professional artificial insemination.",
   },
   {
     icon: ClipboardCheck,
@@ -23,7 +23,7 @@ const FEATURES = [
   {
     icon: Users,
     title: "Farmer Training",
-    body: "Practical knowledge transfer to farmers across Kaduna and beyond.",
+    body: "Practical knowledge transfer to farmers across Nigeria.",
   },
 ] as const;
 
@@ -41,9 +41,10 @@ export function WhyJrnAgro() {
 
             <p className="mt-6 text-[17px] font-normal leading-relaxed text-white/80">
               We are a full livestock operation built around one principle:
-              healthy animals produce better results. From breeding and feeding
-              to record-keeping and training, every part of what we do is
-              designed to deliver consistent quality.
+              healthy, genetically enhanced animals produce better results. From
+              breeding and feeding to record keeping and training, every part of
+              what we do is designed to deliver consistent quality for farms
+              nationwide.
             </p>
 
             <Button

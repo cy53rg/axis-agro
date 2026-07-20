@@ -1,14 +1,14 @@
 "use client";
 
 import { Menu } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { SiteLogo } from "@/components/brand/SiteLogo";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { Button } from "@/components/ui/Button";
-import { PUBLIC_NAV_LINKS, SITE_NAME } from "@/constants/site";
+import { PUBLIC_NAV_LINKS, SITE_LOGO_PATH, SITE_NAME } from "@/constants/site";
 import { cn } from "@/lib/utils";
 
 function isActive(pathname: string, href: string) {
@@ -23,6 +23,7 @@ export function Header() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [logoError, setLogoError] = useState(false);
 
   const farmLat = process.env.NEXT_PUBLIC_FARM_LAT;
   const farmLng = process.env.NEXT_PUBLIC_FARM_LNG;
@@ -72,10 +73,27 @@ export function Header() {
             className="flex h-full max-w-[62%] shrink-0 items-center py-2 sm:max-w-[48%] lg:max-w-none"
             aria-label={`${SITE_NAME} home`}
           >
-            <SiteLogo
-              tone={useLightChrome ? "inverse" : "brand"}
-              className="max-w-full drop-shadow-sm transition-[filter,opacity] duration-200"
-            />
+            {!logoError ? (
+              <Image
+                src={SITE_LOGO_PATH}
+                alt={`${SITE_NAME} quality livestock farm in Kaduna, Nigeria`}
+                width={280}
+                height={88}
+                priority
+                className="h-12 w-auto max-w-[176px] object-contain object-left drop-shadow-sm sm:h-14 sm:max-w-[220px] lg:h-[3.75rem] lg:max-w-[260px]"
+                sizes="(max-width: 640px) 176px, (max-width: 1024px) 220px, 260px"
+                onError={() => setLogoError(true)}
+              />
+            ) : (
+              <span
+                className={cn(
+                  "font-display text-xl font-bold leading-tight sm:text-2xl",
+                  useLightChrome ? "text-white" : "text-navy"
+                )}
+              >
+                {SITE_NAME}
+              </span>
+            )}
           </Link>
 
           <div className="hidden items-center gap-0.5 xl:flex">

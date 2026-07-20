@@ -16,7 +16,7 @@ type LookupAnimal = PublicAnimal & { status: "active" };
 
 function formatWeight(weightKg: number | null | undefined): string {
   if (weightKg == null || Number.isNaN(Number(weightKg))) {
-    return "—";
+    return "N/A";
   }
 
   return `${Number(weightKg)} kg`;
@@ -206,7 +206,7 @@ export function HeroAnimalSearch({ className }: { className?: string }) {
               <div className="relative aspect-[16/10] bg-cream">
                 <Image
                   src={animal.photo_url || "/cattle.jpg"}
-                  alt={`${displayName} — ${animal.species} at JRN Agro LTD`}
+                  alt={`${displayName}, ${animal.species} at JRN Agro LTD`}
                   fill
                   className="object-cover"
                   sizes="(max-width: 448px) 100vw, 448px"
@@ -243,7 +243,7 @@ export function HeroAnimalSearch({ className }: { className?: string }) {
                       Breed
                     </dt>
                     <dd className="mt-1 font-medium text-navy">
-                      {animal.breed?.trim() || "—"}
+                      {animal.breed?.trim() || "N/A"}
                     </dd>
                   </div>
                   <div>

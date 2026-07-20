@@ -1,4 +1,4 @@
-/** Shared motion tokens — keep grant-portfolio animations restrained. */
+/** Shared motion tokens. Keep grant-portfolio animations restrained. */
 export const FADE_DURATION = 0.3;
 export const FADE_EASE = "easeOut" as const;
 

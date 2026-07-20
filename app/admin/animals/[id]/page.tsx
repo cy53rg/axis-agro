@@ -69,7 +69,7 @@ function FieldError({ message }: { message?: string }) {
 
 function displayText(value: string | null | undefined): string {
   if (!value || !String(value).trim()) {
-    return "—";
+    return "N/A";
   }
 
   return String(value);
@@ -77,7 +77,7 @@ function displayText(value: string | null | undefined): string {
 
 function formatOptionalDate(value: string | null | undefined): string {
   if (!value) {
-    return "—";
+    return "N/A";
   }
 
   try {
@@ -532,7 +532,7 @@ export default function AnimalDetailPage() {
               <p className="text-sm text-body-text">
                 {animal.current_weight_kg != null
                   ? `${animal.current_weight_kg} kg`
-                  : "—"}
+                  : "N/A"}
               </p>
             </div>
             <div>
@@ -566,7 +566,7 @@ export default function AnimalDetailPage() {
                   <p className="text-sm text-body-text">
                     {animal.sold_price != null
                       ? `₦${Number(animal.sold_price).toLocaleString()}`
-                      : "—"}
+                      : "N/A"}
                   </p>
                 </div>
                 <div>

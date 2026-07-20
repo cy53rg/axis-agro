@@ -52,7 +52,7 @@ type AgeFilter = "all" | AgeBucket;
 
 function formatWeight(weightKg: number | null | undefined): string {
   if (weightKg == null || Number.isNaN(Number(weightKg))) {
-    return "—";
+    return "N/A";
   }
 
   return `${Number(weightKg)} kg`;
@@ -60,7 +60,7 @@ function formatWeight(weightKg: number | null | undefined): string {
 
 function formatOptionalDate(value: string | null | undefined): string {
   if (!value) {
-    return "—";
+    return "N/A";
   }
 
   try {
@@ -72,7 +72,7 @@ function formatOptionalDate(value: string | null | undefined): string {
 
 function displayText(value: string | null | undefined): string {
   if (!value || !value.trim()) {
-    return "—";
+    return "N/A";
   }
 
   return value;
@@ -246,7 +246,7 @@ export default function AdminAnimalsPage() {
             Animals
           </h2>
           <p className="mt-1 text-sm text-muted">
-            Internal registry — includes sick, sold, and dead animals with
+            Internal registry that includes sick, sold, and dead animals with
             commercial notes.
           </p>
         </div>

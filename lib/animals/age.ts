@@ -64,7 +64,7 @@ export function formatAnimalAge(
   const age = getAnimalAge(dateOfBirth, asOf);
 
   if (!age) {
-    return "—";
+    return "N/A";
   }
 
   const parts: string[] = [];
@@ -86,8 +86,8 @@ export type AgeBucket = "under_6m" | "6_12m" | "1_2y" | "over_2y";
 
 export const AGE_BUCKET_OPTIONS: { value: AgeBucket; label: string }[] = [
   { value: "under_6m", label: "Under 6 months" },
-  { value: "6_12m", label: "6–12 months" },
-  { value: "1_2y", label: "1–2 years" },
+  { value: "6_12m", label: "6 to 12 months" },
+  { value: "1_2y", label: "1 to 2 years" },
   { value: "over_2y", label: "Over 2 years" },
 ];
 

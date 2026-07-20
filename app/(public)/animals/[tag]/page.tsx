@@ -17,7 +17,7 @@ interface AnimalProfilePageProps {
 
 function displayText(value: string | null | undefined): string {
   if (!value || !String(value).trim()) {
-    return "—";
+    return "N/A";
   }
 
   return String(value);
@@ -25,7 +25,7 @@ function displayText(value: string | null | undefined): string {
 
 function formatOptionalDate(value: string | null | undefined): string {
   if (!value) {
-    return "—";
+    return "N/A";
   }
 
   try {
@@ -92,7 +92,7 @@ export default async function AnimalProfilePage({
             <div className="relative aspect-[4/3] overflow-hidden rounded-card bg-navy/10 shadow-[0_2px_16px_rgba(0,0,0,0.07)]">
               <Image
                 src={imageSrc}
-                alt={`${displayName} — ${animal.species} at JRN Agro LTD farm in Kaduna`}
+                alt={`${displayName}, ${animal.species} at JRN Agro LTD farm in Kaduna`}
                 fill
                 priority
                 quality={85}
@@ -159,7 +159,7 @@ export default async function AnimalProfilePage({
                   <dd className="mt-1 text-sm font-medium text-navy">
                     {animal.current_weight_kg != null
                       ? `${animal.current_weight_kg} kg`
-                      : "—"}
+                      : "N/A"}
                   </dd>
                 </div>
               </dl>

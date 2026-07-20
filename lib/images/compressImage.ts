@@ -30,7 +30,7 @@ export async function compressImageForUpload(
     options.maxWidthOrHeight ?? IMAGE_UPLOAD_MAX_DIMENSION;
   const convertToJpeg = options.convertToJpeg ?? true;
 
-  // Skip work when already small enough and within dimension hints is unknown —
+  // Skip work when already small enough and within dimension hints is unknown. 
   // still run compression so oversized dimensions are reduced.
   try {
     const compressed = await imageCompression(file, {

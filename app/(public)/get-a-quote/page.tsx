@@ -11,7 +11,7 @@ import { SITE_CONTACT } from "@/constants/site";
 export const metadata: Metadata = {
   title: "Request a Quote",
   description:
-    "Request a quote from JRN Agro LTD for livestock, poultry, or AI services. We serve Kaduna and Northern Nigeria.",
+    "Request a quote from JRN Agro LTD for genetically enhanced livestock, poultry, or AI services. We serve Kaduna and farms across Nigeria.",
 };
 
 export default function GetAQuotePage() {

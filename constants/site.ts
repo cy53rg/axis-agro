@@ -1,8 +1,7 @@
 export const SITE_NAME = "JRN Agro LTD";
 export const SITE_NAME_FORMAL = "JRN Agro Limited";
 export const SITE_RC_NUMBER = "9679462";
-export const SITE_LOGO_PATH = "/logo.svg";
-export const SITE_FAVICON_PATH = "/favicon.svg";
+export const SITE_LOGO_PATH = "/jrn-agro-logo.png";
 export const SITE_CAC_CERTIFICATE_PATH = "/CAC_certificate.png";
 
 export const SITE_CONTACT = {
@@ -10,7 +9,7 @@ export const SITE_CONTACT = {
   phone: "+2348000000000",
   phoneDisplay: "+234 800 000 0000",
   email: "admin@jrnagro.ng",
-  hours: "Mon – Sat, 7:00am – 6:00pm",
+  hours: "Mon to Sat, 7:00am to 6:00pm",
 };
 
 export const SITE_SOCIAL = {
@@ -28,7 +27,7 @@ export const SITE_COMPLIANCE = {
 
 export const FOOTER_TAGLINE = "Healthy Livestock, Consistent Quality.";
 
-/** Primary public navigation — shared by header, mobile menu, and footer. */
+/** Primary public navigation shared by header, mobile menu, and footer. */
 export const PUBLIC_NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },

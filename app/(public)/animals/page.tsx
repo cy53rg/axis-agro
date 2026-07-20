@@ -11,7 +11,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Our Animals",
   description:
-    "Browse active JRN Agro LTD livestock by species, breed, or tag number — cattle, goats, and poultry in Kaduna, Nigeria.",
+    "Browse active JRN Agro LTD livestock by species, breed, or tag number, including cattle, goats, and poultry in Kaduna, Nigeria.",
 };
 
 export default async function AnimalsPage() {
@@ -26,7 +26,7 @@ export default async function AnimalsPage() {
       <PageHero
         eyebrow="Livestock"
         title="Our Animals"
-        subtitle="Healthy cattle, goats, and poultry from our Kaduna farm — see who’s on the ground."
+        subtitle="Healthy cattle, goats, and poultry from our Kaduna farm. See who’s on the ground."
         imageUrl="/cattle.jpg"
         height="short"
       />

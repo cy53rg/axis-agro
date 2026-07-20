@@ -304,7 +304,7 @@ export default function AdminGalleryPage() {
               Drag photos here or click to browse
             </p>
             <p className="mt-2 text-sm text-muted">
-              JPEG, PNG, or WebP — up to 5MB each, 10 files max
+              JPEG, PNG, or WebP, up to 5MB each, 10 files max
             </p>
           </div>
 

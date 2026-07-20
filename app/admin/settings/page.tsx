@@ -342,7 +342,7 @@ export default function AdminSettingsPage() {
                 farm_hours: event.target.value,
               }))
             }
-            placeholder="Mon–Sat 7am–6pm"
+            placeholder="Mon to Sat 7am to 6pm"
             className={cn(inputClassName, "resize-y")}
           />
         </Field>

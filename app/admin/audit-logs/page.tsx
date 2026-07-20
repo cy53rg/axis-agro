@@ -25,7 +25,7 @@ import type { AuditAction, AuditLogEntry } from "@/types";
 
 function formatTimestamp(value: string | null | undefined): string {
   if (!value) {
-    return "—";
+    return "N/A";
   }
 
   try {
@@ -101,7 +101,7 @@ function AuditLogRow({ log }: { log: AuditLogEntry }) {
           {log.table_name}
         </TableCell>
         <TableCell className="px-4 py-3 text-body-text">
-          {log.actor_email || "—"}
+          {log.actor_email || "N/A"}
         </TableCell>
         <TableCell className="px-4 py-3">
           <span className="inline-flex items-center gap-1 text-sm font-medium text-navy">
@@ -189,7 +189,7 @@ export default function AdminAuditLogsPage() {
           Audit Logs
         </h2>
         <p className="mt-1 text-sm text-muted">
-          Manager and owner access only — timestamp, action, table, and actor
+          Manager and owner access only: timestamp, action, table, and actor
           email with expandable before/after data.
         </p>
       </div>

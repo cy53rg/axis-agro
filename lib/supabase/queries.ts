@@ -24,7 +24,7 @@ const VACCINATION_PUBLIC_COLUMNS =
 
 const EVENT_PUBLIC_COLUMNS = "id, event_type, event_date, notes";
 
-/** Event types that may contain internal sale/death details — never public. */
+/** Event types that may contain internal sale/death details, never public. */
 const PUBLIC_EVENT_TYPES = [
   "birth",
   "arrival",

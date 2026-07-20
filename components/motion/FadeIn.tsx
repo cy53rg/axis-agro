@@ -17,7 +17,7 @@ interface FadeInProps {
 
 /**
  * Lightweight opacity fade for sections and cards.
- * No translate, scale, or bounce — suitable for a grant portfolio.
+ * No translate, scale, or bounce, suitable for a grant portfolio.
  */
 export function FadeIn({
   children,

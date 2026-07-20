@@ -258,7 +258,7 @@ export function AnimalsGrid({ animals }: AnimalsGridProps) {
                 ) : null}
               </div>
               <p id="tag-search-hint" className="text-xs text-muted">
-                Results update as you type — matches unique tag numbers only.
+                Results update as you type and matches unique tag numbers only.
               </p>
             </div>
           </div>
@@ -322,7 +322,7 @@ export function AnimalsGrid({ animals }: AnimalsGridProps) {
                     <div className="relative aspect-[4/3] overflow-hidden bg-navy/5">
                       <Image
                         src={imageSrc}
-                        alt={`${displayName} — ${animal.species} at JRN Agro LTD farm in Kaduna`}
+                        alt={`${displayName}, ${animal.species} at JRN Agro LTD farm in Kaduna`}
                         fill
                         quality={80}
                         loading="lazy"
@@ -356,7 +356,7 @@ export function AnimalsGrid({ animals }: AnimalsGridProps) {
                             Breed
                           </dt>
                           <dd className="text-body-text">
-                            {animal.breed?.trim() || "—"}
+                            {animal.breed?.trim() || "N/A"}
                           </dd>
                         </div>
                         <div className="col-span-2">

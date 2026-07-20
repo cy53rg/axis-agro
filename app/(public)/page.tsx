@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     absolute: "JRN Agro LTD | Quality Livestock Farm in Kaduna, Nigeria",
   },
   description:
-    "JRN Agro Limited is a mixed livestock and poultry farm in Kaduna, Nigeria. We raise cattle, goats, chickens, turkeys and ducks. AI services and farmer training available.",
+    "JRN Agro Limited is a mixed livestock and poultry farm in Kaduna, Nigeria. We raise genetically enhanced cattle, goats, chickens, turkeys and ducks, with AI services and farmer training for farms across Nigeria.",
 };
 
 export default async function HomePage() {
