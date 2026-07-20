@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 
 import { Button } from "@/components/ui/Button";
+import { SiteLogo } from "@/components/brand/SiteLogo";
 import { SITE_NAME } from "@/constants/site";
 import { cn } from "@/lib/utils";
 
@@ -85,13 +86,9 @@ export function MobileNav({
         aria-label="Site menu"
       >
         <div className="flex items-center justify-between border-b border-divider px-4 py-3 sm:px-5">
-          <div>
-            <p className="font-label text-xs font-semibold uppercase tracking-wider text-muted">
-              Menu
-            </p>
-            <p className="mt-0.5 font-display text-lg font-bold text-navy">
-              {SITE_NAME}
-            </p>
+          <div className="min-w-0 pr-2">
+            <SiteLogo tone="brand" className="h-10 w-auto max-w-[180px]" />
+            <p className="sr-only">{SITE_NAME} menu</p>
           </div>
           <button
             type="button"

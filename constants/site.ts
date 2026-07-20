@@ -1,7 +1,8 @@
 export const SITE_NAME = "JRN Agro LTD";
 export const SITE_NAME_FORMAL = "JRN Agro Limited";
 export const SITE_RC_NUMBER = "9679462";
-export const SITE_LOGO_PATH = "/jrn-agro-logo.png";
+export const SITE_LOGO_PATH = "/logo.svg";
+export const SITE_FAVICON_PATH = "/favicon.svg";
 export const SITE_CAC_CERTIFICATE_PATH = "/CAC_certificate.png";
 
 export const SITE_CONTACT = {

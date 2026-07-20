@@ -50,6 +50,31 @@ body {
   html {
     scroll-behavior: auto;
   }
+
+  .hero-bg-motion {
+    animation: none !important;
+  }
+}
+
+@keyframes hero-ken-burns {
+  0% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  40% {
+    transform: scale(1.06) translate3d(-1.2%, -0.8%, 0);
+  }
+  70% {
+    transform: scale(1.045) translate3d(0.9%, -0.4%, 0);
+  }
+  100% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+}
+
+.hero-bg-motion {
+  transform-origin: center center;
+  will-change: transform;
+  animation: hero-ken-burns 48s ease-in-out infinite;
 }
 
 .gold-border-top {

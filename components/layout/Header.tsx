@@ -1,14 +1,14 @@
 "use client";
 
 import { Menu } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { SiteLogo } from "@/components/brand/SiteLogo";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { Button } from "@/components/ui/Button";
-import { PUBLIC_NAV_LINKS, SITE_LOGO_PATH, SITE_NAME } from "@/constants/site";
+import { PUBLIC_NAV_LINKS, SITE_NAME } from "@/constants/site";
 import { cn } from "@/lib/utils";
 
 function isActive(pathname: string, href: string) {
@@ -23,7 +23,6 @@ export function Header() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [logoError, setLogoError] = useState(false);
 
   const farmLat = process.env.NEXT_PUBLIC_FARM_LAT;
   const farmLng = process.env.NEXT_PUBLIC_FARM_LNG;
@@ -58,12 +57,10 @@ export function Header() {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-40 border-b bg-transparent backdrop-blur-xl transition-[border-color,box-shadow] duration-200",
+          "fixed inset-x-0 top-0 z-40 border-b bg-transparent backdrop-blur-2xl transition-[border-color] duration-200",
           "supports-[backdrop-filter]:bg-transparent",
-          useLightChrome
-            ? "border-white/15 shadow-none"
-            : "border-divider/40 shadow-[0_1px_0_rgba(27,46,60,0.04)]",
-          isScrolled && "border-divider/50"
+          useLightChrome ? "border-white/10" : "border-divider/30",
+          isScrolled && (useLightChrome ? "border-white/15" : "border-divider/40")
         )}
       >
         <nav
@@ -72,30 +69,13 @@ export function Header() {
         >
           <Link
             href="/"
-            className="flex h-full max-w-[58%] shrink-0 items-center py-2 sm:max-w-[44%] lg:max-w-none"
+            className="flex h-full max-w-[62%] shrink-0 items-center py-2 sm:max-w-[48%] lg:max-w-none"
             aria-label={`${SITE_NAME} home`}
           >
-            {!logoError ? (
-              <Image
-                src={SITE_LOGO_PATH}
-                alt={`${SITE_NAME} — quality livestock farm in Kaduna, Nigeria`}
-                width={280}
-                height={88}
-                priority
-                className="h-12 w-auto max-w-[176px] object-contain object-left drop-shadow-sm sm:h-14 sm:max-w-[220px] lg:h-[3.75rem] lg:max-w-[260px]"
-                sizes="(max-width: 640px) 176px, (max-width: 1024px) 220px, 260px"
-                onError={() => setLogoError(true)}
-              />
-            ) : (
-              <span
-                className={cn(
-                  "font-display text-xl font-bold leading-tight sm:text-2xl",
-                  useLightChrome ? "text-white" : "text-navy"
-                )}
-              >
-                {SITE_NAME}
-              </span>
-            )}
+            <SiteLogo
+              tone={useLightChrome ? "inverse" : "brand"}
+              className="max-w-full drop-shadow-sm transition-[filter,opacity] duration-200"
+            />
           </Link>
 
           <div className="hidden items-center gap-0.5 xl:flex">
@@ -114,7 +94,7 @@ export function Header() {
                         : "text-white/90 hover:bg-white/10 hover:text-white"
                       : active
                         ? "bg-forest/10 text-forest"
-                        : "text-navy hover:bg-white/50 hover:text-forest"
+                        : "text-navy hover:bg-white/40 hover:text-forest"
                   )}
                 >
                   {link.label}
@@ -142,7 +122,7 @@ export function Header() {
                 "flex min-h-11 min-w-11 items-center justify-center rounded-btn transition-colors duration-200 xl:hidden",
                 useLightChrome
                   ? "text-white hover:bg-white/10"
-                  : "text-navy hover:bg-white/50 hover:text-forest"
+                  : "text-navy hover:bg-white/40 hover:text-forest"
               )}
               onClick={() => setIsMobileMenuOpen(true)}
             >

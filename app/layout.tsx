@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat, Playfair_Display } from "next/font/google";
 
-import { SITE_LOGO_PATH, SITE_NAME } from "@/constants/site";
+import { SITE_FAVICON_PATH, SITE_LOGO_PATH, SITE_NAME } from "@/constants/site";
 
 import "./globals.css";
 
@@ -39,9 +39,12 @@ export const metadata: Metadata = {
   keywords:
     "JRN Agro, livestock farm Kaduna, poultry farm Nigeria, artificial insemination cattle, breeding stock Kaduna",
   icons: {
-    icon: [{ url: SITE_LOGO_PATH, type: "image/png" }],
-    shortcut: SITE_LOGO_PATH,
-    apple: [{ url: SITE_LOGO_PATH, type: "image/png" }],
+    icon: [
+      { url: SITE_FAVICON_PATH, type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    shortcut: SITE_FAVICON_PATH,
+    apple: [{ url: SITE_LOGO_PATH, type: "image/svg+xml" }],
   },
   openGraph: {
     type: "website",

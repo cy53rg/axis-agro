@@ -13,15 +13,17 @@ export function HeroSection({
 }: HeroSectionProps) {
   return (
     <section className="relative min-h-[100svh] w-full overflow-hidden sm:min-h-[640px] md:min-h-[720px]">
-      <Image
-        src={imageUrl}
-        alt="Cattle and poultry grazing at JRN Agro LTD livestock farm in Kaduna, Nigeria"
-        fill
-        priority
-        loading="eager"
-        className="object-cover object-center"
-        sizes="100vw"
-      />
+      <div className="hero-bg-motion absolute -inset-[5%]">
+        <Image
+          src={imageUrl}
+          alt="Cattle and poultry grazing at JRN Agro LTD livestock farm in Kaduna, Nigeria"
+          fill
+          priority
+          loading="eager"
+          className="object-cover object-center"
+          sizes="110vw"
+        />
+      </div>
 
       <div
         className="absolute inset-0"

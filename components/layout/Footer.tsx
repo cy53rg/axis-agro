@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { SiteLogo } from "@/components/brand/SiteLogo";
 import {
   FOOTER_QUICK_LINKS,
   FOOTER_SERVICES,
@@ -16,9 +17,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
           <div className="space-y-3 sm:space-y-4">
-            <p className="font-display text-xl font-bold text-white sm:text-2xl">
-              {SITE_NAME}
-            </p>
+            <SiteLogo tone="inverse" className="h-11 w-auto max-w-[220px]" />
             <p className="max-w-xs text-sm font-normal leading-relaxed text-white/60">
               {FOOTER_TAGLINE}
             </p>
