@@ -1,6 +1,7 @@
 import { ArrowRight, Beef, Bird, GraduationCap } from "lucide-react";
 import Link from "next/link";
 
+import { FadeIn } from "@/components/motion/FadeIn";
 import { GoldBorderCard } from "@/components/ui/GoldBorderCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
@@ -36,32 +37,31 @@ export function ServicesCards() {
         />
 
         <div className="mt-12 grid grid-cols-1 gap-6 sm:mt-16 sm:gap-8 md:grid-cols-3">
-          {SERVICES.map((service) => {
+          {SERVICES.map((service, index) => {
             const Icon = service.icon;
 
             return (
-              <GoldBorderCard
-                key={service.title}
-                className="flex h-full flex-col"
-              >
-                <Icon
-                  className="h-9 w-9 text-forest"
-                  aria-hidden="true"
-                />
-                <h3 className="mt-4 font-display text-2xl font-normal text-navy">
-                  {service.title}
-                </h3>
-                <p className="mt-3 text-[15px] font-normal leading-relaxed text-muted">
-                  {service.body}
-                </p>
-                <Link
-                  href={service.href}
-                  className="mt-auto inline-flex items-center gap-1 pt-6 font-label text-[13px] font-semibold text-forest transition-colors hover:underline"
-                >
-                  Learn more
-                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                </Link>
-              </GoldBorderCard>
+              <FadeIn key={service.title} delay={index * 0.05}>
+                <GoldBorderCard className="flex h-full flex-col">
+                  <Icon
+                    className="h-9 w-9 text-forest"
+                    aria-hidden="true"
+                  />
+                  <h3 className="mt-4 font-display text-2xl font-normal text-navy">
+                    {service.title}
+                  </h3>
+                  <p className="mt-3 text-[15px] font-normal leading-relaxed text-muted">
+                    {service.body}
+                  </p>
+                  <Link
+                    href={service.href}
+                    className="mt-auto inline-flex items-center gap-1 pt-6 font-label text-[13px] font-semibold text-forest transition-colors hover:underline"
+                  >
+                    Learn more
+                    <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </Link>
+                </GoldBorderCard>
+              </FadeIn>
             );
           })}
         </div>

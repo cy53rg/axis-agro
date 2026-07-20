@@ -29,10 +29,10 @@ function GalleryItem({ image }: { image: GalleryImage }) {
         fill
         quality={80}
         loading="lazy"
-        className="object-cover transition-transform duration-300 group-hover:scale-105"
+        className="object-cover transition-opacity duration-300"
         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
       />
-      <div className="absolute inset-0 flex items-end bg-navy/0 p-4 opacity-0 transition-all duration-300 group-hover:bg-navy/60 group-hover:opacity-100">
+      <div className="absolute inset-0 flex items-end bg-navy/0 p-4 opacity-0 transition-opacity duration-300 group-hover:bg-navy/60 group-hover:opacity-100">
         {image.caption ? (
           <p className="text-sm font-normal text-white">{image.caption}</p>
         ) : null}

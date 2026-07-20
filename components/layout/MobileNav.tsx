@@ -4,6 +4,8 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 
+import { Button } from "@/components/ui/Button";
+import { SITE_NAME } from "@/constants/site";
 import { cn } from "@/lib/utils";
 
 export interface NavLink {
@@ -57,7 +59,7 @@ export function MobileNav({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-50 lg:hidden",
+        "fixed inset-0 z-50 xl:hidden",
         isOpen ? "pointer-events-auto" : "pointer-events-none"
       )}
       aria-hidden={!isOpen}
@@ -66,36 +68,42 @@ export function MobileNav({
         type="button"
         aria-label="Close menu"
         className={cn(
-          "absolute inset-0 bg-navy/40 transition-opacity duration-300",
+          "absolute inset-0 bg-navy/40 transition-opacity duration-200 ease-out",
           isOpen ? "opacity-100" : "opacity-0"
         )}
         onClick={onClose}
       />
 
       <div
+        id="mobile-navigation"
         className={cn(
-          "absolute right-0 top-0 flex h-full w-full max-w-sm flex-col bg-white shadow-xl transition-transform duration-300 ease-in-out",
+          "absolute right-0 top-0 flex h-full w-full max-w-[20rem] flex-col bg-white shadow-lg transition-transform duration-200 ease-out sm:max-w-sm",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
         role="dialog"
         aria-modal="true"
-        aria-label="Mobile navigation"
+        aria-label="Site menu"
       >
-        <div className="flex items-center justify-between border-b border-divider px-4 py-4 sm:px-6">
-          <span className="font-label text-sm font-semibold uppercase tracking-wide text-navy">
-            Menu
-          </span>
+        <div className="flex items-center justify-between border-b border-divider px-4 py-3 sm:px-5">
+          <div>
+            <p className="font-label text-xs font-semibold uppercase tracking-wider text-muted">
+              Menu
+            </p>
+            <p className="mt-0.5 font-display text-lg font-bold text-navy">
+              {SITE_NAME}
+            </p>
+          </div>
           <button
             type="button"
             aria-label="Close menu"
-            className="flex min-h-11 min-w-11 items-center justify-center rounded-btn text-navy transition-colors hover:text-forest"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-btn text-navy transition-colors duration-200 hover:bg-cream hover:text-forest"
             onClick={onClose}
           >
-            <X className="h-6 w-6" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
 
-        <nav className="flex flex-1 flex-col px-4 py-4 sm:px-6">
+        <nav className="flex flex-1 flex-col overflow-y-auto px-3 py-3 sm:px-4">
           {links.map((link) => {
             const active = isActive(pathname, link.href);
 
@@ -105,10 +113,10 @@ export function MobileNav({
                 href={link.href}
                 onClick={onClose}
                 className={cn(
-                  "flex min-h-11 items-center border-b border-divider font-label text-sm font-semibold transition-colors",
+                  "flex min-h-12 items-center rounded-btn px-3 font-label text-sm font-semibold transition-colors duration-200",
                   active
-                    ? "text-forest"
-                    : "text-navy hover:text-forest"
+                    ? "bg-forest/10 text-forest"
+                    : "text-navy hover:bg-cream hover:text-forest"
                 )}
               >
                 {link.label}
@@ -117,12 +125,21 @@ export function MobileNav({
           })}
         </nav>
 
-        <div className="border-t border-divider px-4 py-4 sm:px-6 sm:py-6">
+        <div className="space-y-2 border-t border-divider px-4 py-4 sm:px-5 sm:py-5">
+          <Button
+            href="/get-a-quote"
+            variant="primary"
+            size="md"
+            className="w-full"
+            onClick={onClose}
+          >
+            Get a Quote
+          </Button>
           <a
             href={visitUsHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex min-h-11 w-full items-center justify-center rounded-btn bg-forest px-5 font-label text-sm font-semibold text-white transition-colors hover:bg-forest/90"
+            className="flex min-h-11 w-full items-center justify-center rounded-btn border border-divider bg-white px-5 font-label text-sm font-semibold text-navy transition-colors duration-200 hover:border-forest hover:text-forest"
             onClick={onClose}
           >
             Visit Us

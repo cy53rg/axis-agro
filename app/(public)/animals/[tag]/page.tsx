@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { getPublicAnimalByTag } from "@/lib/supabase/queries";
 import { formatAnimalAge } from "@/lib/animals/age";
 import { formatDate } from "@/lib/utils";
-import type { AnimalStatus, EventType } from "@/types";
+import type { EventType } from "@/types";
 
 export const revalidate = 3600;
 
@@ -33,22 +33,6 @@ function formatOptionalDate(value: string | null | undefined): string {
   } catch {
     return value;
   }
-}
-
-function getStatusLabel(status: AnimalStatus): string {
-  if (status === "sold") {
-    return "Sold";
-  }
-
-  return "Active";
-}
-
-function getStatusColor(status: AnimalStatus): string {
-  if (status === "sold") {
-    return "bg-gray-100 text-gray-700";
-  }
-
-  return "bg-green-100 text-green-800";
 }
 
 function getEventTypeLabel(type: EventType): string {
@@ -122,11 +106,6 @@ export default async function AnimalProfilePage({
                 <h1 className="font-display text-3xl font-bold text-navy md:text-4xl">
                   {displayName}
                 </h1>
-                <span
-                  className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${getStatusColor(animal.status)}`}
-                >
-                  {getStatusLabel(animal.status)}
-                </span>
               </div>
               <p className="mt-2 text-base text-muted">
                 Tag {animal.tag_number}

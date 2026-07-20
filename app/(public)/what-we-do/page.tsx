@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
+import { QuoteCTA } from "@/components/home/QuoteCTA";
+import { FadeIn } from "@/components/motion/FadeIn";
 import { PageHero } from "@/components/pages/PageHero";
 import { ServiceBlock } from "@/components/pages/ServiceBlock";
-import { QuoteCTA } from "@/components/home/QuoteCTA";
 
 export const metadata: Metadata = {
   title: "What We Do - Services",
@@ -21,64 +22,72 @@ export default function WhatWeDoPage() {
         height="medium"
       />
 
-      <ServiceBlock
-        eyebrow="Cattle & Goats"
-        title="Beef Production, Breeding & AI Services"
-        description="Our cattle and goat operations focus on quality breeding stock and beef production. Whether you need animals for your own farm or quality meat supply, we maintain strict health and nutrition standards throughout."
-        keyPoints={[
-          "Breeding stock sales — cattle and goats",
-          "Quality beef production",
-          "Artificial insemination services",
-          "Herd improvement consultations",
-          "Sourcing of quality breeds",
-        ]}
-        imageUrl="/cattle.jpg"
-        imageAlt="Cattle and goats at JRN Agro LTD farm in Kaduna"
-        imageOnLeft={true}
-        bgColor="white"
-        ctaText="Request a Quote"
-        ctaHref="/get-a-quote"
-      />
+      <FadeIn>
+        <ServiceBlock
+          eyebrow="Cattle & Goats"
+          title="Beef Production, Breeding & AI Services"
+          description="Our cattle and goat operations focus on quality breeding stock and beef production. Whether you need animals for your own farm or quality meat supply, we maintain strict health and nutrition standards throughout."
+          keyPoints={[
+            "Breeding stock sales — cattle and goats",
+            "Quality beef production",
+            "Artificial insemination services",
+            "Herd improvement consultations",
+            "Sourcing of quality breeds",
+          ]}
+          imageUrl="/cattle.jpg"
+          imageAlt="Cattle and goats at JRN Agro LTD farm in Kaduna"
+          imageOnLeft={true}
+          bgColor="white"
+          ctaText="Request a Quote"
+          ctaHref="/get-a-quote"
+        />
+      </FadeIn>
 
-      <ServiceBlock
-        eyebrow="Poultry"
-        title="Broilers, Layers, Turkeys & Ducks"
-        description="Our poultry operations produce a wide range of birds for meat and eggs. We maintain hygienic housing, proper vaccination schedules, and balanced feeding to deliver birds that are healthy and market-ready."
-        keyPoints={[
-          "Broiler chickens for meat",
-          "Layers for egg production",
-          "Turkeys for meat supply",
-          "Ducks for meat and eggs",
-          "Supply to individuals, restaurants, and markets",
-        ]}
-        imageUrl="/about-farm.jpg"
-        imageAlt="Poultry farming at JRN Agro LTD"
-        imageOnLeft={false}
-        bgColor="cream"
-        ctaText="Request a Quote"
-        ctaHref="/get-a-quote"
-      />
+      <FadeIn>
+        <ServiceBlock
+          eyebrow="Poultry"
+          title="Broilers, Layers, Turkeys & Ducks"
+          description="Our poultry operations produce a wide range of birds for meat and eggs. We maintain hygienic housing, proper vaccination schedules, and balanced feeding to deliver birds that are healthy and market-ready."
+          keyPoints={[
+            "Broiler chickens for meat",
+            "Layers for egg production",
+            "Turkeys for meat supply",
+            "Ducks for meat and eggs",
+            "Supply to individuals, restaurants, and markets",
+          ]}
+          imageUrl="/about-farm.jpg"
+          imageAlt="Poultry farming at JRN Agro LTD"
+          imageOnLeft={false}
+          bgColor="cream"
+          ctaText="Request a Quote"
+          ctaHref="/get-a-quote"
+        />
+      </FadeIn>
 
-      <ServiceBlock
-        eyebrow="Farmer Support"
-        title="Training & Support for Local Farmers"
-        description="We believe in sharing knowledge. Our practical training programmes help small and medium-scale farmers in Kaduna improve their operations — from basic livestock management to advanced AI techniques."
-        keyPoints={[
-          "Practical livestock management training",
-          "Artificial insemination technique training",
-          "Farm record-keeping and business management",
-          "On-farm advisory visits",
-          "Support for small and medium-scale farmers",
-        ]}
-        imageUrl="/hero-farm.jpg"
-        imageAlt="Farmer training session at JRN Agro LTD"
-        imageOnLeft={true}
-        bgColor="white"
-        ctaText="Get in Touch"
-        ctaHref="/contact"
-      />
+      <FadeIn>
+        <ServiceBlock
+          eyebrow="Farmer Support"
+          title="Training & Support for Local Farmers"
+          description="We believe in sharing knowledge. Our practical training programmes help small and medium-scale farmers in Kaduna improve their operations — from basic livestock management to advanced AI techniques."
+          keyPoints={[
+            "Practical livestock management training",
+            "Artificial insemination technique training",
+            "Farm record-keeping and business management",
+            "On-farm advisory visits",
+            "Support for small and medium-scale farmers",
+          ]}
+          imageUrl="/hero-farm.jpg"
+          imageAlt="Farmer training session at JRN Agro LTD"
+          imageOnLeft={true}
+          bgColor="white"
+          ctaText="Get in Touch"
+          ctaHref="/contact"
+        />
+      </FadeIn>
 
-      <QuoteCTA />
+      <FadeIn>
+        <QuoteCTA />
+      </FadeIn>
     </>
   );
 }

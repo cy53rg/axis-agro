@@ -27,14 +27,19 @@ export const SITE_COMPLIANCE = {
 
 export const FOOTER_TAGLINE = "Healthy Livestock, Consistent Quality.";
 
-export const FOOTER_QUICK_LINKS = [
+/** Primary public navigation — shared by header, mobile menu, and footer. */
+export const PUBLIC_NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },
   { href: "/what-we-do", label: "What We Do" },
   { href: "/animals", label: "Animals" },
   { href: "/gallery", label: "Our Farm" },
-  { href: "/get-a-quote", label: "Get a Quote" },
   { href: "/contact", label: "Contact" },
+] as const;
+
+export const FOOTER_QUICK_LINKS = [
+  ...PUBLIC_NAV_LINKS,
+  { href: "/get-a-quote", label: "Get a Quote" },
 ] as const;
 
 export const FOOTER_SERVICES = [

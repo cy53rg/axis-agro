@@ -7,6 +7,7 @@ import { QuoteCTA } from "@/components/home/QuoteCTA";
 import { ServicesCards } from "@/components/home/ServicesCards";
 import { StatsBar } from "@/components/home/StatsBar";
 import { WhyJrnAgro } from "@/components/home/WhyJrnAgro";
+import { FadeIn } from "@/components/motion/FadeIn";
 import { getFeaturedGalleryImages } from "@/lib/supabase/queries";
 
 export const revalidate = 3600;
@@ -25,12 +26,24 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection imageUrl="/hero-farm.jpg" />
-      <StatsBar />
-      <AboutSnapshot imageUrl="/about-farm.jpg" />
-      <ServicesCards />
-      <GalleryStrip images={featuredImages} />
-      <WhyJrnAgro />
-      <QuoteCTA />
+      <FadeIn>
+        <StatsBar />
+      </FadeIn>
+      <FadeIn>
+        <AboutSnapshot imageUrl="/about-farm.jpg" />
+      </FadeIn>
+      <FadeIn>
+        <ServicesCards />
+      </FadeIn>
+      <FadeIn>
+        <GalleryStrip images={featuredImages} />
+      </FadeIn>
+      <FadeIn>
+        <WhyJrnAgro />
+      </FadeIn>
+      <FadeIn>
+        <QuoteCTA />
+      </FadeIn>
     </>
   );
 }

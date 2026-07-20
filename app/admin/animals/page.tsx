@@ -1,47 +1,54 @@
 "use client";
 
-import { Loader2, Plus, X } from "lucide-react";
-import Link from "next/link";
+import { Loader2, Plus, Search, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import {
+  AnimalStatusBadge,
+  ANIMAL_STATUS_OPTIONS,
+  getAnimalStatusLabel,
+} from "@/components/admin/AnimalStatusBadge";
 import { AdminErrorState } from "@/components/admin/AdminErrorState";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/Button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  AGE_BUCKET_OPTIONS,
+  matchesAgeBucket,
+  type AgeBucket,
+} from "@/lib/animals/age";
 import { createClient } from "@/lib/supabase/client";
 import { cn, formatAge, formatDate } from "@/lib/utils";
 import type { Animal, AnimalStatus } from "@/types";
 
 type SpeciesFilter = "all" | string;
+type BreedFilter = "all" | string;
 type StatusFilter = "all" | AnimalStatus;
-
-const STATUS_OPTIONS: { label: string; value: StatusFilter }[] = [
-  { label: "All statuses", value: "all" },
-  { label: "Active", value: "active" },
-  { label: "Sick", value: "sick" },
-  { label: "Sold", value: "sold" },
-  { label: "Deceased", value: "deceased" },
-];
-
-function getAnimalStatusLabel(status: AnimalStatus): string {
-  const labels: Record<AnimalStatus, string> = {
-    active: "Active",
-    sick: "Sick",
-    sold: "Sold",
-    deceased: "Deceased",
-  };
-
-  return labels[status];
-}
-
-function getAnimalStatusColor(status: AnimalStatus): string {
-  const colors: Record<AnimalStatus, string> = {
-    active: "bg-green-100 text-green-800",
-    sick: "bg-yellow-100 text-yellow-800",
-    sold: "bg-gray-100 text-gray-700",
-    deceased: "bg-red-100 text-red-800",
-  };
-
-  return colors[status];
-}
+type AgeFilter = "all" | AgeBucket;
 
 function formatWeight(weightKg: number | null | undefined): string {
   if (weightKg == null || Number.isNaN(Number(weightKg))) {
@@ -77,7 +84,9 @@ export default function AdminAnimalsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [speciesFilter, setSpeciesFilter] = useState<SpeciesFilter>("all");
+  const [breedFilter, setBreedFilter] = useState<BreedFilter>("all");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [ageFilter, setAgeFilter] = useState<AgeFilter>("all");
   const [searchQuery, setSearchQuery] = useState("");
 
   const fetchAnimals = useCallback(async () => {
@@ -112,16 +121,35 @@ export default function AdminAnimalsPage() {
   }, [fetchAnimals]);
 
   const speciesOptions = useMemo(() => {
-    const unique = Array.from(
+    return Array.from(
       new Set(
         animals
           .map((animal) => animal.species?.trim())
           .filter((species): species is string => Boolean(species))
       )
     ).sort((a, b) => a.localeCompare(b));
-
-    return unique;
   }, [animals]);
+
+  const breedOptions = useMemo(() => {
+    const scoped =
+      speciesFilter === "all"
+        ? animals
+        : animals.filter((animal) => animal.species === speciesFilter);
+
+    return Array.from(
+      new Set(
+        scoped
+          .map((animal) => animal.breed?.trim())
+          .filter((breed): breed is string => Boolean(breed))
+      )
+    ).sort((a, b) => a.localeCompare(b));
+  }, [animals, speciesFilter]);
+
+  useEffect(() => {
+    if (breedFilter !== "all" && !breedOptions.includes(breedFilter)) {
+      setBreedFilter("all");
+    }
+  }, [breedFilter, breedOptions]);
 
   const filteredAnimals = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -129,16 +157,33 @@ export default function AdminAnimalsPage() {
     return animals.filter((animal) => {
       const matchesSpecies =
         speciesFilter === "all" || animal.species === speciesFilter;
+      const matchesBreed =
+        breedFilter === "all" || animal.breed?.trim() === breedFilter;
       const matchesStatus =
         statusFilter === "all" || animal.status === statusFilter;
+      const matchesAge = matchesAgeBucket(animal.date_of_birth, ageFilter);
       const matchesSearch =
         !query ||
         animal.tag_number?.toLowerCase().includes(query) ||
-        animal.name?.toLowerCase().includes(query);
+        animal.name?.toLowerCase().includes(query) ||
+        animal.breed?.toLowerCase().includes(query);
 
-      return matchesSpecies && matchesStatus && matchesSearch;
+      return (
+        matchesSpecies &&
+        matchesBreed &&
+        matchesStatus &&
+        matchesAge &&
+        matchesSearch
+      );
     });
-  }, [animals, searchQuery, speciesFilter, statusFilter]);
+  }, [
+    animals,
+    searchQuery,
+    speciesFilter,
+    breedFilter,
+    statusFilter,
+    ageFilter,
+  ]);
 
   const activeChips = [
     speciesFilter !== "all"
@@ -148,11 +193,28 @@ export default function AdminAnimalsPage() {
           onRemove: () => setSpeciesFilter("all"),
         }
       : null,
+    breedFilter !== "all"
+      ? {
+          key: "breed",
+          label: `Breed: ${breedFilter}`,
+          onRemove: () => setBreedFilter("all"),
+        }
+      : null,
     statusFilter !== "all"
       ? {
           key: "status",
           label: `Status: ${getAnimalStatusLabel(statusFilter)}`,
           onRemove: () => setStatusFilter("all"),
+        }
+      : null,
+    ageFilter !== "all"
+      ? {
+          key: "age",
+          label: `Age: ${
+            AGE_BUCKET_OPTIONS.find((option) => option.value === ageFilter)
+              ?.label ?? ageFilter
+          }`,
+          onRemove: () => setAgeFilter("all"),
         }
       : null,
     searchQuery.trim()
@@ -168,240 +230,291 @@ export default function AdminAnimalsPage() {
     onRemove: () => void;
   }[];
 
+  const clearFilters = () => {
+    setSpeciesFilter("all");
+    setBreedFilter("all");
+    setStatusFilter("all");
+    setAgeFilter("all");
+    setSearchQuery("");
+  };
+
   return (
-    <div>
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="font-label text-2xl font-semibold text-navy">Animals</h2>
+          <h2 className="font-label text-2xl font-semibold text-navy">
+            Animals
+          </h2>
           <p className="mt-1 text-sm text-muted">
-            Internal registry of all animals, including sold and deceased.
+            Internal registry — includes sick, sold, and dead animals with
+            commercial notes.
           </p>
         </div>
-        <Link
-          href="/admin/animals/new"
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-btn bg-forest px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-forest/90"
-        >
-          <Plus className="h-4 w-4" aria-hidden="true" />
+        <Button href="/admin/animals/new" variant="primary">
+          <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
           Add Animal
-        </Link>
+        </Button>
       </div>
 
-      <div className="mb-6 space-y-4 rounded-lg bg-white p-4 shadow-sm">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <label className="block">
-            <span className="mb-1.5 block text-xs font-medium text-muted">
-              Species
-            </span>
-            <select
-              value={speciesFilter}
-              onChange={(event) => setSpeciesFilter(event.target.value)}
-              className="w-full min-h-11 rounded-btn border border-divider bg-white px-4 py-3 text-sm text-body-text focus:border-forest focus:outline-none focus:ring-1 focus:ring-forest"
-            >
-              <option value="all">All species</option>
-              {speciesOptions.map((species) => (
-                <option key={species} value={species}>
-                  {species}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="block">
-            <span className="mb-1.5 block text-xs font-medium text-muted">
-              Status
-            </span>
-            <select
-              value={statusFilter}
-              onChange={(event) =>
-                setStatusFilter(event.target.value as StatusFilter)
-              }
-              className="w-full min-h-11 rounded-btn border border-divider bg-white px-4 py-3 text-sm text-body-text focus:border-forest focus:outline-none focus:ring-1 focus:ring-forest"
-            >
-              {STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="block sm:col-span-2 lg:col-span-1">
-            <span className="mb-1.5 block text-xs font-medium text-muted">
-              Search
-            </span>
-            <input
-              type="search"
-              placeholder="Search by tag number or name..."
-              value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
-              className="w-full min-h-11 rounded-btn border border-divider px-4 py-3 text-sm text-body-text focus:border-forest focus:outline-none focus:ring-1 focus:ring-forest"
-            />
-          </label>
-        </div>
-
-        {activeChips.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {activeChips.map((chip) => (
-              <button
-                key={chip.key}
-                type="button"
-                onClick={chip.onRemove}
-                className="inline-flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-forest"
+      <Card className="bg-white py-0 shadow-sm ring-1 ring-black/5">
+        <CardHeader className="border-b border-divider px-4 py-4 sm:px-6">
+          <CardTitle className="font-label text-base text-navy">
+            Filters
+          </CardTitle>
+          <CardDescription className="text-muted">
+            Filter the directory by breed, age, and internal status.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4 px-4 py-4 sm:px-6">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+            <div className="space-y-2">
+              <Label htmlFor="animal-species">Species</Label>
+              <Select
+                value={speciesFilter}
+                onValueChange={(value) =>
+                  setSpeciesFilter((value as SpeciesFilter) || "all")
+                }
               >
-                {chip.label}
-                <X className="h-3 w-3" aria-hidden="true" />
-              </button>
-            ))}
-          </div>
-        ) : null}
-      </div>
+                <SelectTrigger
+                  id="animal-species"
+                  className="h-11 w-full min-h-11"
+                >
+                  <SelectValue placeholder="All species" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All species</SelectItem>
+                  {speciesOptions.map((species) => (
+                    <SelectItem key={species} value={species}>
+                      {species}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-      <div className="overflow-x-auto rounded-lg bg-white shadow-sm">
-        {fetchError ? (
-          <AdminErrorState
-            message={fetchError}
-            onRetry={() => void fetchAnimals()}
-          />
-        ) : isLoading ? (
-          <div className="flex items-center justify-center py-16 text-muted">
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />
-            Loading animals...
+            <div className="space-y-2">
+              <Label htmlFor="animal-breed">Breed</Label>
+              <Select
+                value={breedFilter}
+                onValueChange={(value) =>
+                  setBreedFilter((value as BreedFilter) || "all")
+                }
+              >
+                <SelectTrigger
+                  id="animal-breed"
+                  className="h-11 w-full min-h-11"
+                >
+                  <SelectValue placeholder="All breeds" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All breeds</SelectItem>
+                  {breedOptions.map((breed) => (
+                    <SelectItem key={breed} value={breed}>
+                      {breed}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="animal-age">Age</Label>
+              <Select
+                value={ageFilter}
+                onValueChange={(value) =>
+                  setAgeFilter((value as AgeFilter) || "all")
+                }
+              >
+                <SelectTrigger id="animal-age" className="h-11 w-full min-h-11">
+                  <SelectValue placeholder="All ages" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All ages</SelectItem>
+                  {AGE_BUCKET_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="animal-status">Status</Label>
+              <Select
+                value={statusFilter}
+                onValueChange={(value) =>
+                  setStatusFilter((value as StatusFilter) || "all")
+                }
+              >
+                <SelectTrigger
+                  id="animal-status"
+                  className="h-11 w-full min-h-11"
+                >
+                  <SelectValue placeholder="All statuses" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All statuses</SelectItem>
+                  {ANIMAL_STATUS_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="animal-search">Search</Label>
+              <div className="relative">
+                <Search
+                  className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted"
+                  aria-hidden="true"
+                />
+                <Input
+                  id="animal-search"
+                  type="search"
+                  placeholder="Tag, name, or breed..."
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  className="h-11 min-h-11 pl-9"
+                />
+              </div>
+            </div>
           </div>
-        ) : filteredAnimals.length === 0 ? (
-          <p className="px-6 py-16 text-center text-sm text-muted">
-            {animals.length === 0
-              ? "No animals recorded yet. Animals will appear here once added."
-              : "No animals match your filters."}
-          </p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] text-left">
-              <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC]">
-                <tr>
-                  <th className="px-4 py-3 text-sm font-medium text-muted">
-                    Tag #
-                  </th>
-                  <th className="px-4 py-3 text-sm font-medium text-muted">
-                    Name
-                  </th>
-                  <th className="px-4 py-3 text-sm font-medium text-muted">
-                    Species
-                  </th>
-                  <th className="px-4 py-3 text-sm font-medium text-muted">
-                    Breed
-                  </th>
-                  <th className="px-4 py-3 text-sm font-medium text-muted">
-                    Status
-                  </th>
-                  <th className="px-4 py-3 text-sm font-medium text-muted">
-                    Weight
-                  </th>
-                  <th className="px-4 py-3 text-sm font-medium text-muted">
-                    Age
-                  </th>
-                  <th className="px-4 py-3 text-sm font-medium text-muted">
-                    DOB
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
+
+          {activeChips.length > 0 ? (
+            <div className="flex flex-wrap items-center gap-2">
+              {activeChips.map((chip) => (
+                <button
+                  key={chip.key}
+                  type="button"
+                  onClick={chip.onRemove}
+                  className="inline-flex"
+                >
+                  <Badge
+                    variant="secondary"
+                    className="gap-1 rounded-full bg-green-50 px-3 py-1 text-forest hover:bg-green-100"
+                  >
+                    {chip.label}
+                    <X className="h-3 w-3" aria-hidden="true" />
+                  </Badge>
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="text-xs font-medium text-forest hover:underline"
+              >
+                Clear all
+              </button>
+            </div>
+          ) : null}
+        </CardContent>
+      </Card>
+
+      <Card className="bg-white py-0 shadow-sm ring-1 ring-black/5">
+        <CardHeader className="flex flex-row items-center justify-between gap-3 border-b border-divider px-4 py-4 sm:px-6">
+          <div>
+            <CardTitle className="font-label text-base text-navy">
+              Animal directory
+            </CardTitle>
+            <CardDescription className="text-muted">
+              {isLoading
+                ? "Loading…"
+                : `${filteredAnimals.length} of ${animals.length} animals`}
+            </CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent className="px-0 py-0">
+          {fetchError ? (
+            <div className="p-6">
+              <AdminErrorState
+                message={fetchError}
+                onRetry={() => void fetchAnimals()}
+              />
+            </div>
+          ) : isLoading ? (
+            <div className="flex items-center justify-center py-16 text-muted">
+              <Loader2
+                className="mr-2 h-5 w-5 animate-spin"
+                aria-hidden="true"
+              />
+              Loading animals...
+            </div>
+          ) : filteredAnimals.length === 0 ? (
+            <p className="px-6 py-16 text-center text-sm text-muted">
+              {animals.length === 0
+                ? "No animals recorded yet. Animals will appear here once added."
+                : "No animals match your filters."}
+            </p>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="px-4 text-muted">Tag #</TableHead>
+                  <TableHead className="px-4 text-muted">Name</TableHead>
+                  <TableHead className="px-4 text-muted">Species</TableHead>
+                  <TableHead className="px-4 text-muted">Breed</TableHead>
+                  <TableHead className="px-4 text-muted">Status</TableHead>
+                  <TableHead className="px-4 text-muted">Weight</TableHead>
+                  <TableHead className="px-4 text-muted">Age</TableHead>
+                  <TableHead className="px-4 text-muted">DOB</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {filteredAnimals.map((animal) => {
-                  const isMuted =
+                  const isClosed =
                     animal.status === "sold" || animal.status === "deceased";
 
                   return (
-                    <tr
+                    <TableRow
                       key={animal.id}
-                      onClick={() => router.push(`/admin/animals/${animal.id}`)}
+                      onClick={() =>
+                        router.push(`/admin/animals/${animal.id}`)
+                      }
                       className={cn(
-                        "cursor-pointer border-b border-[#E2E8F0] transition-colors",
-                        isMuted
-                          ? "bg-[#F8FAFC] text-muted hover:bg-[#F1F5F9]"
-                          : "hover:bg-gray-50"
+                        "cursor-pointer",
+                        isClosed && "bg-slate-50 text-muted"
                       )}
                     >
-                      <td
+                      <TableCell
                         className={cn(
-                          "px-4 py-4 text-sm font-medium",
-                          isMuted ? "text-muted" : "text-navy"
+                          "px-4 py-3 font-medium",
+                          isClosed ? "text-muted" : "text-navy"
                         )}
                       >
                         {animal.tag_number}
-                      </td>
-                      <td
-                        className={cn(
-                          "px-4 py-4 text-sm",
-                          isMuted ? "text-muted" : "text-body-text"
-                        )}
-                      >
-                        <span className="inline-flex flex-wrap items-center gap-2">
-                          {displayText(animal.name)}
-                          {isMuted ? (
-                            <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-600">
-                              {getAnimalStatusLabel(animal.status)}
-                            </span>
-                          ) : null}
-                        </span>
-                      </td>
-                      <td
-                        className={cn(
-                          "px-4 py-4 text-sm",
-                          isMuted ? "text-muted" : "text-body-text"
-                        )}
-                      >
+                      </TableCell>
+                      <TableCell className="px-4 py-3">
+                        {displayText(animal.name)}
+                      </TableCell>
+                      <TableCell className="px-4 py-3">
                         {displayText(animal.species)}
-                      </td>
-                      <td
-                        className={cn(
-                          "px-4 py-4 text-sm",
-                          isMuted ? "text-muted" : "text-body-text"
-                        )}
-                      >
+                      </TableCell>
+                      <TableCell className="px-4 py-3">
                         {displayText(animal.breed)}
-                      </td>
-                      <td className="px-4 py-4">
-                        <span
-                          className={cn(
-                            "inline-flex rounded-full px-2.5 py-1 text-xs font-semibold",
-                            getAnimalStatusColor(animal.status),
-                            isMuted && "opacity-80"
-                          )}
-                        >
-                          {getAnimalStatusLabel(animal.status)}
-                        </span>
-                      </td>
-                      <td
-                        className={cn(
-                          "px-4 py-4 text-sm",
-                          isMuted ? "text-muted" : "text-body-text"
-                        )}
-                      >
+                      </TableCell>
+                      <TableCell className="px-4 py-3">
+                        <AnimalStatusBadge status={animal.status} />
+                      </TableCell>
+                      <TableCell className="px-4 py-3">
                         {formatWeight(animal.current_weight_kg)}
-                      </td>
-                      <td
-                        className={cn(
-                          "px-4 py-4 text-sm",
-                          isMuted ? "text-muted" : "text-body-text"
-                        )}
-                      >
+                      </TableCell>
+                      <TableCell className="px-4 py-3">
                         {formatAge(animal.date_of_birth)}
-                      </td>
-                      <td
-                        className={cn(
-                          "px-4 py-4 text-sm",
-                          isMuted ? "text-muted" : "text-body-text"
-                        )}
-                      >
+                      </TableCell>
+                      <TableCell className="px-4 py-3">
                         {formatOptionalDate(animal.date_of_birth)}
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700&family=Playfair+Display:wght@400;700&display=swap");
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 @tailwind base;
 @tailwind components;
@@ -12,7 +14,7 @@
   --cream: #f5f2eb;
   --divider: #e4ded3;
   --body-text: #2c2c2c;
-  --muted: #6b7280;
+  --muted-text: #6b7280;
 }
 
 html {
@@ -26,14 +28,27 @@ body {
 }
 
 .section-padding {
-  padding-top: 64px;
-  padding-bottom: 64px;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 640px) {
+  .section-padding {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
 }
 
 @media (min-width: 768px) {
   .section-padding {
-    padding-top: 96px;
-    padding-bottom: 96px;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 
@@ -62,4 +77,48 @@ body {
 
 .skeleton-pulse {
   animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@layer base {
+  .theme {
+    --font-heading: var(--font-sans);
+    --font-sans: var(--font-sans);
+  }
+  :root {
+    --background: var(--cream);
+    --foreground: var(--body-text);
+    --card: #ffffff;
+    --card-foreground: var(--body-text);
+    --popover: #ffffff;
+    --popover-foreground: var(--body-text);
+    --primary: var(--forest);
+    --primary-foreground: #ffffff;
+    --secondary: #f0ebe3;
+    --secondary-foreground: var(--navy);
+    --muted: #f0ebe3;
+    --muted-foreground: var(--muted-text);
+    --accent: #f0ebe3;
+    --accent-foreground: var(--navy);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: var(--divider);
+    --input: var(--divider);
+    --ring: var(--forest);
+    --chart-1: var(--forest);
+    --chart-2: var(--gold);
+    --chart-3: var(--navy);
+    --chart-4: var(--sage);
+    --chart-5: var(--muted-text);
+    --radius: 0.625rem;
+    --sidebar: #ffffff;
+    --sidebar-foreground: var(--navy);
+    --sidebar-primary: var(--forest);
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #f0ebe3;
+    --sidebar-accent-foreground: var(--navy);
+    --sidebar-border: var(--divider);
+    --sidebar-ring: var(--forest);
+  }
+  * {
+    @apply border-border outline-ring/50;
+  }
 }

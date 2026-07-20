@@ -9,6 +9,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { AdminErrorState } from "@/components/admin/AdminErrorState";
+import {
+  AnimalStatusBadge,
+  getAnimalStatusLabel,
+} from "@/components/admin/AnimalStatusBadge";
 import { createClient } from "@/lib/supabase/client";
 import {
   ANIMAL_STATUSES,
@@ -83,28 +87,6 @@ function formatOptionalDate(value: string | null | undefined): string {
   }
 }
 
-function getAnimalStatusLabel(status: AnimalStatus): string {
-  const labels: Record<AnimalStatus, string> = {
-    active: "Active",
-    sick: "Sick",
-    sold: "Sold",
-    deceased: "Deceased",
-  };
-
-  return labels[status];
-}
-
-function getAnimalStatusColor(status: AnimalStatus): string {
-  const colors: Record<AnimalStatus, string> = {
-    active: "bg-green-100 text-green-800",
-    sick: "bg-yellow-100 text-yellow-800",
-    sold: "bg-gray-100 text-gray-700",
-    deceased: "bg-red-100 text-red-800",
-  };
-
-  return colors[status];
-}
-
 function getEventTypeLabel(type: EventType): string {
   return type
     .split("_")
@@ -122,7 +104,7 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-lg bg-white p-6 shadow-sm">
+    <section className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-black/5">
       <h3 className="font-label text-lg font-semibold text-navy">{title}</h3>
       {description ? (
         <p className="mt-1 text-sm text-muted">{description}</p>
@@ -430,7 +412,7 @@ export default function AnimalDetailPage() {
           ? new Date(data.sold_date).toISOString()
           : new Date().toISOString(),
       notes: eventNotesParts.join(". "),
-      is_public: data.status !== "deceased",
+      is_public: false,
       recorded_by: recordedBy,
     });
 
@@ -495,14 +477,7 @@ export default function AnimalDetailPage() {
             Tag {animal.tag_number} · {animal.species}
           </p>
         </div>
-        <span
-          className={cn(
-            "inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold",
-            getAnimalStatusColor(animal.status)
-          )}
-        >
-          {getAnimalStatusLabel(animal.status)}
-        </span>
+        <AnimalStatusBadge status={animal.status} className="text-xs" />
       </div>
 
       {formMessage ? (

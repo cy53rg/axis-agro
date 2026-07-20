@@ -81,3 +81,51 @@ export function formatAnimalAge(
 
   return parts.join(", ");
 }
+
+export type AgeBucket = "under_6m" | "6_12m" | "1_2y" | "over_2y";
+
+export const AGE_BUCKET_OPTIONS: { value: AgeBucket; label: string }[] = [
+  { value: "under_6m", label: "Under 6 months" },
+  { value: "6_12m", label: "6–12 months" },
+  { value: "1_2y", label: "1–2 years" },
+  { value: "over_2y", label: "Over 2 years" },
+];
+
+/**
+ * Maps date_of_birth into a coarse admin filter bucket.
+ */
+export function getAgeBucket(
+  dateOfBirth: string | null | undefined,
+  asOf: Date = new Date()
+): AgeBucket | null {
+  const age = getAnimalAge(dateOfBirth, asOf);
+
+  if (!age) {
+    return null;
+  }
+
+  const totalMonths = age.years * 12 + age.months;
+
+  if (totalMonths < 6) {
+    return "under_6m";
+  }
+  if (totalMonths < 12) {
+    return "6_12m";
+  }
+  if (age.years < 2) {
+    return "1_2y";
+  }
+
+  return "over_2y";
+}
+
+export function matchesAgeBucket(
+  dateOfBirth: string | null | undefined,
+  bucket: AgeBucket | "all"
+): boolean {
+  if (bucket === "all") {
+    return true;
+  }
+
+  return getAgeBucket(dateOfBirth) === bucket;
+}

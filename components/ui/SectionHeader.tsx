@@ -17,12 +17,12 @@ export function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <div className={cn(centered && "text-center")}>
-      <p className="mb-3 font-label text-[13px] font-semibold uppercase tracking-[0.12em] text-gold">
+      <p className="mb-2 font-label text-[11px] font-semibold uppercase tracking-[0.14em] text-gold sm:mb-3 sm:text-[12px] md:text-[13px]">
         {eyebrow}
       </p>
       <h2
         className={cn(
-          "font-display text-[32px] font-bold leading-tight md:text-[40px]",
+          "font-display text-[1.75rem] font-bold leading-tight sm:text-[2rem] md:text-[2.5rem]",
           lightMode ? "text-white" : "text-navy"
         )}
       >
@@ -31,7 +31,7 @@ export function SectionHeader({
       {subtitle ? (
         <p
           className={cn(
-            "mt-4 max-w-[600px] text-[17px] font-normal",
+            "mt-3 max-w-[36rem] text-base font-normal leading-relaxed sm:mt-4 sm:text-[17px]",
             lightMode ? "text-white/80" : "text-muted",
             centered && "mx-auto"
           )}

@@ -6,18 +6,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { MobileNav, type NavLink } from "@/components/layout/MobileNav";
-import { SITE_LOGO_PATH, SITE_NAME } from "@/constants/site";
+import { MobileNav } from "@/components/layout/MobileNav";
+import { Button } from "@/components/ui/Button";
+import { PUBLIC_NAV_LINKS, SITE_LOGO_PATH, SITE_NAME } from "@/constants/site";
 import { cn } from "@/lib/utils";
-
-const NAV_LINKS: NavLink[] = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About Us" },
-  { href: "/what-we-do", label: "What We Do" },
-  { href: "/animals", label: "Animals" },
-  { href: "/gallery", label: "Our Farm" },
-  { href: "/get-a-quote", label: "Get a Quote" },
-];
 
 function isActive(pathname: string, href: string) {
   if (href === "/") {
@@ -58,14 +50,17 @@ export function Header() {
     <>
       <header
         className={cn(
-          "sticky top-0 z-40 bg-white transition-shadow duration-200",
+          "sticky top-0 z-40 bg-white/95 backdrop-blur-sm transition-[box-shadow,border-color] duration-200",
           isScrolled && "border-b border-divider shadow-sm"
         )}
       >
-        <nav className="mx-auto flex h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 sm:h-20 sm:px-6 lg:h-[5.5rem] lg:px-8">
+        <nav
+          className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:h-[4.5rem] sm:gap-4 sm:px-6 lg:px-8"
+          aria-label="Primary"
+        >
           <Link
             href="/"
-            className="flex h-full max-w-[46%] shrink-0 items-center sm:max-w-none"
+            className="flex h-full max-w-[55%] shrink-0 items-center sm:max-w-[40%] lg:max-w-none"
             aria-label={`${SITE_NAME} home`}
           >
             {!logoError ? (
@@ -75,19 +70,19 @@ export function Header() {
                 width={200}
                 height={64}
                 priority
-                className="h-11 w-auto max-w-[160px] object-contain object-left sm:h-12 sm:max-w-[180px] md:h-14 md:max-w-[220px] lg:h-16 lg:max-w-[240px]"
-                sizes="(max-width: 640px) 160px, (max-width: 1024px) 200px, 240px"
+                className="h-10 w-auto max-w-[148px] object-contain object-left sm:h-11 sm:max-w-[168px] lg:h-12 lg:max-w-[200px]"
+                sizes="(max-width: 640px) 148px, (max-width: 1024px) 168px, 200px"
                 onError={() => setLogoError(true)}
               />
             ) : (
-              <span className="font-display text-lg font-bold text-navy sm:text-xl">
+              <span className="font-display text-lg font-bold leading-tight text-navy sm:text-xl">
                 {SITE_NAME}
               </span>
             )}
           </Link>
 
-          <div className="hidden items-center gap-8 lg:flex">
-            {NAV_LINKS.map((link) => {
+          <div className="hidden items-center gap-1 xl:flex">
+            {PUBLIC_NAV_LINKS.map((link) => {
               const active = isActive(pathname, link.href);
 
               return (
@@ -95,10 +90,10 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "font-label text-sm font-semibold transition-colors",
+                    "rounded-btn px-3 py-2 font-label text-[13px] font-semibold tracking-wide transition-colors duration-200",
                     active
-                      ? "border-b-2 border-forest pb-1 text-forest"
-                      : "text-navy hover:text-forest"
+                      ? "bg-forest/10 text-forest"
+                      : "text-navy hover:bg-cream hover:text-forest"
                   )}
                 >
                   {link.label}
@@ -107,24 +102,25 @@ export function Header() {
             })}
           </div>
 
-          <div className="flex items-center gap-3">
-            <a
-              href={visitUsHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden rounded-btn bg-forest px-5 py-2.5 font-label text-sm font-semibold text-white transition-colors hover:bg-forest/90 lg:inline-block"
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Button
+              href="/get-a-quote"
+              variant="primary"
+              size="sm"
+              className="hidden min-h-10 px-4 text-[13px] sm:inline-flex"
             >
-              Visit Us
-            </a>
+              Get a Quote
+            </Button>
 
             <button
               type="button"
               aria-label="Open menu"
               aria-expanded={isMobileMenuOpen}
-              className="flex min-h-11 min-w-11 items-center justify-center rounded-btn text-navy transition-colors hover:text-forest lg:hidden"
+              aria-controls="mobile-navigation"
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-btn text-navy transition-colors duration-200 hover:bg-cream hover:text-forest xl:hidden"
               onClick={() => setIsMobileMenuOpen(true)}
             >
-              <Menu className="h-6 w-6" />
+              <Menu className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
             </button>
           </div>
         </nav>
@@ -133,7 +129,7 @@ export function Header() {
       <MobileNav
         isOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}
-        links={NAV_LINKS}
+        links={[...PUBLIC_NAV_LINKS]}
         pathname={pathname}
         visitUsHref={visitUsHref}
       />

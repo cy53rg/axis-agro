@@ -1,30 +1,36 @@
 "use client";
 
+import { Search, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import type { PublicAnimal } from "@/lib/supabase/queries";
+import { FadeIn } from "@/components/motion/FadeIn";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { formatAnimalAge } from "@/lib/animals/age";
+import type { PublicAnimal } from "@/lib/supabase/queries";
 import { ANIMAL_SPECIES } from "@/lib/validations/animal";
 import { cn } from "@/lib/utils";
 
-type SpeciesFilter = "all" | (typeof ANIMAL_SPECIES)[number];
-type StatusFilter = "all" | "active" | "sold";
-
-const SPECIES_FILTERS: { label: string; value: SpeciesFilter }[] = [
-  { label: "All", value: "all" },
-  ...ANIMAL_SPECIES.map((species) => ({
-    label: species,
-    value: species,
-  })),
-];
-
-const STATUS_FILTERS: { label: string; value: StatusFilter }[] = [
-  { label: "All", value: "all" },
-  { label: "Active", value: "active" },
-  { label: "Sold", value: "sold" },
-];
+type SpeciesFilter = "all" | string;
+type BreedFilter = "all" | string;
+type StatusFilter = "all" | "active";
 
 interface AnimalsGridProps {
   animals: PublicAnimal[];
@@ -32,198 +38,338 @@ interface AnimalsGridProps {
 
 function AnimalsGridSkeleton() {
   return (
-    <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {Array.from({ length: 6 }).map((_, index) => (
-        <div
+        <Card
           key={index}
-          className="skeleton-pulse overflow-hidden rounded-card bg-navy/10"
+          className="overflow-hidden border-0 bg-white py-0 shadow-sm ring-1 ring-black/5"
         >
-          <div className="aspect-[4/3]" />
-          <div className="h-28 bg-navy/5" />
-        </div>
+          <div className="skeleton-pulse aspect-[4/3] bg-navy/10" />
+          <CardContent className="space-y-3 px-4 py-4">
+            <div className="skeleton-pulse h-4 w-2/3 rounded bg-navy/10" />
+            <div className="skeleton-pulse h-3 w-1/3 rounded bg-navy/10" />
+            <div className="skeleton-pulse h-16 w-full rounded bg-navy/5" />
+          </CardContent>
+        </Card>
       ))}
     </div>
   );
 }
 
-function getStatusBadge(status: PublicAnimal["status"]) {
-  if (status === "sold") {
-    return {
-      label: "Sold",
-      className: "bg-gray-100 text-gray-700",
-    };
-  }
-
-  return {
-    label: "Active",
-    className: "bg-green-100 text-green-800",
-  };
-}
-
 export function AnimalsGrid({ animals }: AnimalsGridProps) {
   const [speciesFilter, setSpeciesFilter] = useState<SpeciesFilter>("all");
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isFiltering, setIsFiltering] = useState(false);
-  const isFirstFilterRender = useRef(true);
+  const [breedFilter, setBreedFilter] = useState<BreedFilter>("all");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("active");
+  const [tagQuery, setTagQuery] = useState("");
+  const [debouncedTagQuery, setDebouncedTagQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+
+  useEffect(() => {
+    setIsSearching(true);
+    const timer = window.setTimeout(() => {
+      setDebouncedTagQuery(tagQuery.trim().toLowerCase());
+      setIsSearching(false);
+    }, 200);
+
+    return () => window.clearTimeout(timer);
+  }, [tagQuery]);
+
+  const speciesOptions = useMemo(() => {
+    const fromData = Array.from(
+      new Set(
+        animals
+          .map((animal) => animal.species?.trim())
+          .filter((species): species is string => Boolean(species))
+      )
+    ).sort((a, b) => a.localeCompare(b));
+
+    return fromData.length > 0 ? fromData : [...ANIMAL_SPECIES];
+  }, [animals]);
+
+  const breedOptions = useMemo(() => {
+    const scoped =
+      speciesFilter === "all"
+        ? animals
+        : animals.filter((animal) => animal.species === speciesFilter);
+
+    return Array.from(
+      new Set(
+        scoped
+          .map((animal) => animal.breed?.trim())
+          .filter((breed): breed is string => Boolean(breed))
+      )
+    ).sort((a, b) => a.localeCompare(b));
+  }, [animals, speciesFilter]);
+
+  useEffect(() => {
+    if (breedFilter !== "all" && !breedOptions.includes(breedFilter)) {
+      setBreedFilter("all");
+    }
+  }, [breedFilter, breedOptions]);
 
   const filteredAnimals = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-
     return animals.filter((animal) => {
       const matchesSpecies =
         speciesFilter === "all" || animal.species === speciesFilter;
+      const matchesBreed =
+        breedFilter === "all" || animal.breed?.trim() === breedFilter;
+      // Public directory only lists active animals; status filter stays evaluator-facing.
       const matchesStatus =
-        statusFilter === "all" || animal.status === statusFilter;
-      const matchesSearch =
-        !query ||
-        animal.tag_number?.toLowerCase().includes(query) ||
-        animal.name?.toLowerCase().includes(query);
+        statusFilter === "all" || statusFilter === "active";
+      const matchesTag =
+        !debouncedTagQuery ||
+        animal.tag_number?.toLowerCase().includes(debouncedTagQuery);
 
-      return matchesSpecies && matchesStatus && matchesSearch;
+      return matchesSpecies && matchesBreed && matchesStatus && matchesTag;
     });
-  }, [animals, searchQuery, speciesFilter, statusFilter]);
+  }, [
+    animals,
+    speciesFilter,
+    breedFilter,
+    statusFilter,
+    debouncedTagQuery,
+  ]);
 
-  useEffect(() => {
-    if (isFirstFilterRender.current) {
-      isFirstFilterRender.current = false;
-      return;
-    }
+  const hasActiveFilters =
+    speciesFilter !== "all" ||
+    breedFilter !== "all" ||
+    statusFilter !== "active" ||
+    Boolean(tagQuery.trim());
 
-    setIsFiltering(true);
-    const timer = window.setTimeout(() => setIsFiltering(false), 300);
-    return () => window.clearTimeout(timer);
-  }, [speciesFilter, statusFilter, searchQuery]);
+  const clearFilters = () => {
+    setSpeciesFilter("all");
+    setBreedFilter("all");
+    setStatusFilter("active");
+    setTagQuery("");
+  };
 
   return (
-    <div>
-      <div className="flex flex-wrap justify-center gap-3">
-        {SPECIES_FILTERS.map((filter) => {
-          const isActive = speciesFilter === filter.value;
-
-          return (
-            <button
-              key={filter.value}
-              type="button"
-              onClick={() => setSpeciesFilter(filter.value)}
-              className={cn(
-                "min-h-11 rounded-full px-5 py-2 font-label text-[13px] font-semibold transition-colors",
-                isActive
-                  ? "bg-forest text-white"
-                  : "border border-forest/30 bg-transparent text-navy hover:border-forest hover:text-forest"
-              )}
-            >
-              {filter.label}
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="mx-auto mt-6 flex max-w-3xl flex-col gap-3 sm:flex-row">
-        <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
-          {STATUS_FILTERS.map((filter) => {
-            const isActive = statusFilter === filter.value;
-
-            return (
-              <button
-                key={filter.value}
-                type="button"
-                onClick={() => setStatusFilter(filter.value)}
-                className={cn(
-                  "min-h-11 rounded-full px-4 py-2 font-label text-[13px] font-semibold transition-colors",
-                  isActive
-                    ? "bg-navy text-white"
-                    : "border border-navy/20 bg-transparent text-navy hover:border-navy hover:bg-navy/5"
-                )}
+    <div className="space-y-8">
+      <Card className="gap-0 border-0 bg-white py-0 shadow-sm ring-1 ring-black/5">
+        <CardHeader className="border-b border-divider px-4 py-4 sm:px-6">
+          <CardTitle className="font-label text-base font-semibold text-navy">
+            Find livestock
+          </CardTitle>
+          <CardDescription className="text-muted">
+            Filter by species, breed, and active status, or search by unique tag
+            number.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4 px-4 py-4 sm:px-6">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="space-y-2">
+              <Label htmlFor="public-species">Species</Label>
+              <Select
+                value={speciesFilter}
+                onValueChange={(value) =>
+                  setSpeciesFilter((value as SpeciesFilter) || "all")
+                }
               >
-                {filter.label}
+                <SelectTrigger
+                  id="public-species"
+                  className="h-11 w-full min-h-11 border-divider bg-white"
+                >
+                  <SelectValue placeholder="All species" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All species</SelectItem>
+                  {speciesOptions.map((species) => (
+                    <SelectItem key={species} value={species}>
+                      {species}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="public-breed">Breed</Label>
+              <Select
+                value={breedFilter}
+                onValueChange={(value) =>
+                  setBreedFilter((value as BreedFilter) || "all")
+                }
+              >
+                <SelectTrigger
+                  id="public-breed"
+                  className="h-11 w-full min-h-11 border-divider bg-white"
+                >
+                  <SelectValue placeholder="All breeds" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All breeds</SelectItem>
+                  {breedOptions.map((breed) => (
+                    <SelectItem key={breed} value={breed}>
+                      {breed}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="public-status">Active status</Label>
+              <Select
+                value={statusFilter}
+                onValueChange={(value) =>
+                  setStatusFilter((value as StatusFilter) || "active")
+                }
+              >
+                <SelectTrigger
+                  id="public-status"
+                  className="h-11 w-full min-h-11 border-divider bg-white"
+                >
+                  <SelectValue placeholder="Active" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All listed</SelectItem>
+                  <SelectItem value="active">Active only</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="public-tag-search">Tag number</Label>
+              <div className="relative">
+                <Search
+                  className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted"
+                  aria-hidden="true"
+                />
+                <Input
+                  id="public-tag-search"
+                  type="search"
+                  value={tagQuery}
+                  onChange={(event) => setTagQuery(event.target.value)}
+                  placeholder="Search tag e.g. CT-001"
+                  autoComplete="off"
+                  spellCheck={false}
+                  aria-describedby="tag-search-hint"
+                  className="h-11 min-h-11 border-divider bg-white pl-9 pr-9"
+                />
+                {tagQuery ? (
+                  <button
+                    type="button"
+                    onClick={() => setTagQuery("")}
+                    className="absolute top-1/2 right-2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md text-muted transition-colors hover:text-navy"
+                    aria-label="Clear tag search"
+                  >
+                    <X className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                ) : null}
+              </div>
+              <p id="tag-search-hint" className="text-xs text-muted">
+                Results update as you type — matches unique tag numbers only.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-muted" aria-live="polite">
+              {isSearching
+                ? "Searching…"
+                : `${filteredAnimals.length} animal${
+                    filteredAnimals.length === 1 ? "" : "s"
+                  } found`}
+              {debouncedTagQuery
+                ? ` for tag “${debouncedTagQuery.toUpperCase()}”`
+                : null}
+            </p>
+            {hasActiveFilters ? (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="text-sm font-medium text-forest hover:underline"
+              >
+                Clear filters
               </button>
-            );
-          })}
-        </div>
+            ) : null}
+          </div>
+        </CardContent>
+      </Card>
 
-        <input
-          type="search"
-          value={searchQuery}
-          onChange={(event) => setSearchQuery(event.target.value)}
-          placeholder="Search by tag number or name..."
-          className="min-h-11 w-full flex-1 rounded-btn border border-forest/20 bg-white px-4 py-3 text-sm text-body-text transition-colors focus:border-forest focus:outline-none focus:ring-1 focus:ring-forest"
-        />
-      </div>
-
-      {isFiltering ? (
+      {isSearching && tagQuery.trim() ? (
         <AnimalsGridSkeleton />
       ) : filteredAnimals.length === 0 ? (
-        <p className="mt-12 text-center text-muted">
-          {animals.length === 0
-            ? "No animals to show yet. Check back soon."
-            : "No animals match your filters."}
-        </p>
+        <Card className="border-0 bg-white py-0 shadow-sm ring-1 ring-black/5">
+          <CardContent className="px-6 py-16 text-center">
+            <p className="text-sm text-muted">
+              {animals.length === 0
+                ? "No animals to show yet. Check back soon."
+                : debouncedTagQuery
+                  ? `No animal found with tag matching “${debouncedTagQuery}”.`
+                  : "No animals match your filters."}
+            </p>
+          </CardContent>
+        </Card>
       ) : (
-        <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredAnimals.map((animal) => {
-            const badge = getStatusBadge(animal.status);
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredAnimals.map((animal, index) => {
             const displayName = animal.name?.trim() || animal.tag_number;
             const imageSrc = animal.photo_url || "/cattle.jpg";
 
             return (
-              <Link
-                key={animal.id}
-                href={`/animals/${encodeURIComponent(animal.tag_number)}`}
-                className="group overflow-hidden rounded-card bg-white shadow-[0_2px_16px_rgba(0,0,0,0.07)] transition-shadow hover:shadow-[0_4px_24px_rgba(0,0,0,0.1)]"
-              >
-                <article>
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image
-                    src={imageSrc}
-                    alt={`${displayName} — ${animal.species} at JRN Agro LTD farm in Kaduna`}
-                    fill
-                    quality={80}
-                    loading="lazy"
-                    className="object-cover transition-transform duration-[400ms] group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                  <span
+              <FadeIn key={animal.id} delay={Math.min(index, 8) * 0.04}>
+                <Link
+                  href={`/animals/${encodeURIComponent(animal.tag_number)}`}
+                  className="group block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-2"
+                >
+                  <Card
                     className={cn(
-                      "absolute right-3 top-3 rounded-full px-2.5 py-1 text-xs font-semibold",
-                      badge.className
+                      "h-full gap-0 overflow-hidden border-0 bg-white py-0 shadow-sm ring-1 ring-black/5 transition-shadow",
+                      "group-hover:shadow-md"
                     )}
                   >
-                    {badge.label}
-                  </span>
-                </div>
+                    <div className="relative aspect-[4/3] overflow-hidden bg-navy/5">
+                      <Image
+                        src={imageSrc}
+                        alt={`${displayName} — ${animal.species} at JRN Agro LTD farm in Kaduna`}
+                        fill
+                        quality={80}
+                        loading="lazy"
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                      <Badge className="absolute top-3 right-3 border-transparent bg-green-100 text-green-800 hover:bg-green-100">
+                        Active
+                      </Badge>
+                    </div>
 
-                <div className="space-y-2 p-4">
-                  <div>
-                    <h3 className="font-label text-base font-semibold text-navy">
-                      {displayName}
-                    </h3>
-                    <p className="mt-0.5 text-sm text-muted">
-                      Tag {animal.tag_number}
-                    </p>
-                  </div>
+                    <CardHeader className="gap-1 px-4 pt-4 pb-2">
+                      <CardTitle className="font-label text-base font-semibold text-navy">
+                        {displayName}
+                      </CardTitle>
+                      <CardDescription className="font-mono text-sm text-muted">
+                        Tag {animal.tag_number}
+                      </CardDescription>
+                    </CardHeader>
 
-                  <dl className="grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
-                    <div>
-                      <dt className="text-xs font-medium text-muted">Species</dt>
-                      <dd className="text-body-text">{animal.species}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-xs font-medium text-muted">Breed</dt>
-                      <dd className="text-body-text">
-                        {animal.breed?.trim() || "—"}
-                      </dd>
-                    </div>
-                    <div className="col-span-2">
-                      <dt className="text-xs font-medium text-muted">Age</dt>
-                      <dd className="text-body-text">
-                        {formatAnimalAge(animal.date_of_birth)}
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-                </article>
-              </Link>
+                    <CardContent className="px-4 pt-0 pb-4">
+                      <dl className="grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
+                        <div>
+                          <dt className="text-xs font-medium text-muted">
+                            Species
+                          </dt>
+                          <dd className="text-body-text">{animal.species}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-xs font-medium text-muted">
+                            Breed
+                          </dt>
+                          <dd className="text-body-text">
+                            {animal.breed?.trim() || "—"}
+                          </dd>
+                        </div>
+                        <div className="col-span-2">
+                          <dt className="text-xs font-medium text-muted">Age</dt>
+                          <dd className="text-body-text">
+                            {formatAnimalAge(animal.date_of_birth)}
+                          </dd>
+                        </div>
+                      </dl>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </FadeIn>
             );
           })}
         </div>

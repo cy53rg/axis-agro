@@ -17,12 +17,22 @@ const SERVICE_PUBLIC_COLUMNS =
   "id, slug, title, description, key_points, icon_name, display_order";
 
 const ANIMAL_PUBLIC_COLUMNS =
-  "id, tag_number, name, species, breed, sex, date_of_birth, current_weight_kg, photo_url, status";
+  "id, tag_number, name, species, breed, sex, date_of_birth, current_weight_kg, photo_url";
 
 const VACCINATION_PUBLIC_COLUMNS =
   "id, vaccine_name, date_given, next_due_date, administered_by";
 
 const EVENT_PUBLIC_COLUMNS = "id, event_type, event_date, notes";
+
+/** Event types that may contain internal sale/death details — never public. */
+const PUBLIC_EVENT_TYPES = [
+  "birth",
+  "arrival",
+  "vaccination",
+  "health_check",
+  "weight_update",
+  "other",
+] as const;
 
 export type PublicAnimal = Pick<
   Animal,
@@ -35,7 +45,6 @@ export type PublicAnimal = Pick<
   | "date_of_birth"
   | "current_weight_kg"
   | "photo_url"
-  | "status"
 >;
 
 export type PublicVaccination = Pick<
@@ -61,7 +70,7 @@ export async function getPublicAnimals(): Promise<PublicAnimal[]> {
       .from("animals")
       .select(ANIMAL_PUBLIC_COLUMNS)
       .eq("is_public", true)
-      .in("status", ["active", "sold"])
+      .eq("status", "active")
       .order("tag_number", { ascending: true });
 
     if (error) {
@@ -81,13 +90,18 @@ export async function getPublicAnimalByTag(
 ): Promise<PublicAnimalProfile | null> {
   try {
     const supabase = createPublicClient();
+    const normalizedTag = tagNumber.trim();
+
+    if (!normalizedTag) {
+      return null;
+    }
 
     const { data: animal, error: animalError } = await supabase
       .from("animals")
       .select(ANIMAL_PUBLIC_COLUMNS)
-      .eq("tag_number", tagNumber)
       .eq("is_public", true)
-      .in("status", ["active", "sold"])
+      .eq("status", "active")
+      .ilike("tag_number", normalizedTag)
       .maybeSingle();
 
     if (animalError) {
@@ -112,6 +126,7 @@ export async function getPublicAnimalByTag(
         .select(EVENT_PUBLIC_COLUMNS)
         .eq("animal_id", publicAnimal.id)
         .eq("is_public", true)
+        .in("event_type", [...PUBLIC_EVENT_TYPES])
         .order("event_date", { ascending: false }),
     ]);
 
@@ -136,6 +151,47 @@ export async function getPublicAnimalByTag(
     };
   } catch (error) {
     console.error("[getPublicAnimalByTag]", error);
+    return null;
+  }
+}
+
+/**
+ * Lightweight public lookup by tag for hero / directory search.
+ * Returns only public-safe fields; never sold/dead or internal notes.
+ */
+export async function lookupPublicAnimalByTag(
+  tagNumber: string
+): Promise<PublicAnimal | null> {
+  try {
+    const normalizedTag = tagNumber.trim();
+
+    if (!normalizedTag || normalizedTag.length > 50) {
+      return null;
+    }
+
+    // Escape LIKE wildcards so tags are matched literally (case-insensitive).
+    const literalTag = normalizedTag
+      .replace(/\\/g, "\\\\")
+      .replace(/%/g, "\\%")
+      .replace(/_/g, "\\_");
+
+    const supabase = createPublicClient();
+    const { data, error } = await supabase
+      .from("animals")
+      .select(ANIMAL_PUBLIC_COLUMNS)
+      .eq("is_public", true)
+      .eq("status", "active")
+      .ilike("tag_number", literalTag)
+      .maybeSingle();
+
+    if (error) {
+      console.error("[lookupPublicAnimalByTag]", error.message);
+      return null;
+    }
+
+    return (data as PublicAnimal | null) ?? null;
+  } catch (error) {
+    console.error("[lookupPublicAnimalByTag]", error);
     return null;
   }
 }

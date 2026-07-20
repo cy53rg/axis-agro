@@ -15,9 +15,9 @@ interface PageHeroProps {
 }
 
 const heightClasses: Record<PageHeroHeight, string> = {
-  tall: "h-[55vh]",
-  medium: "h-[45vh]",
-  short: "h-[35vh]",
+  tall: "min-h-[280px] h-[50vh] sm:h-[55vh]",
+  medium: "min-h-[240px] h-[40vh] sm:h-[45vh]",
+  short: "min-h-[200px] h-[32vh] sm:h-[35vh]",
 };
 
 export function PageHero({
@@ -33,10 +33,7 @@ export function PageHero({
 
   return (
     <section
-      className={cn(
-        "relative w-full overflow-hidden",
-        heightClasses[height]
-      )}
+      className={cn("relative w-full overflow-hidden", heightClasses[height])}
     >
       <Image
         src={imageUrl}
@@ -50,12 +47,12 @@ export function PageHero({
       <div className="absolute inset-0 bg-navy/60" />
 
       <div className="relative z-10 flex h-full items-center">
-        <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-[1200px] px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
           <Eyebrow color="gold">{eyebrow}</Eyebrow>
-          <h1 className="mt-3 max-w-3xl font-display text-4xl font-bold leading-tight text-white md:text-5xl">
+          <h1 className="mt-2 max-w-3xl font-display text-[1.75rem] font-bold leading-tight text-white sm:mt-3 sm:text-4xl md:text-5xl">
             {title}
           </h1>
-          <p className="mt-4 max-w-2xl text-[17px] font-normal text-white/80">
+          <p className="mt-3 max-w-2xl text-sm font-normal leading-relaxed text-white/85 sm:mt-4 sm:text-base md:text-[17px]">
             {subtitle}
           </p>
         </div>
